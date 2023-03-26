@@ -8,7 +8,10 @@ const Button = ({ name, click }) => {
 
 const StatisticLine = ({ text, value, units = '' }) => {
   return (
-    <p>{text} {value} {units}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value} {units}</td>
+    </tr>
   )
 }
 
@@ -16,12 +19,16 @@ const Statistics = ({ good, neutral, bad, total }) => {
   return (
     <>
       <h1>Statistics</h1>
-      <StatisticLine text='good' value={good}/>
-      <StatisticLine text='neutral' value={neutral}/>
-      <StatisticLine text='bad' value={bad}/>
-      <StatisticLine text='total' value={total}/>
-      <StatisticLine text='average' value={total && (good - bad)/100}/>
-      <StatisticLine text='positive' value={total && (good/total)*100} units='%'/>
+      <table>
+        <tbody>
+          <StatisticLine text='good' value={good}/>
+          <StatisticLine text='neutral' value={neutral}/>
+          <StatisticLine text='bad' value={bad}/>
+          <StatisticLine text='total' value={total}/>
+          <StatisticLine text='average' value={total && (good - bad)/100}/>
+          <StatisticLine text='positive' value={total && (good/total)*100} units='%'/>
+        </tbody>
+      </table>
     </>
   )
 }
