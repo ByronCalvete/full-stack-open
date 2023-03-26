@@ -7,12 +7,17 @@ const Button = ({ name, click }) => {
 }
 
 const Statistics = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad
+
   return (
     <>
       <h1>Statistics</h1>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>total {total}</p>
+      <p>average {total && (good - bad)/total}</p>
+      <p>postive {total && (good/total)*100}%</p>
     </>
   )
 }
