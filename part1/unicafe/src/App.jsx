@@ -8,7 +8,6 @@ const Button = ({ name, click }) => {
 
 const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad
-
   return (
     <>
       <h1>Statistics</h1>
