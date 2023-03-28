@@ -1,38 +1,39 @@
 import { useState } from 'react'
 
 const App = () => {
-  const [phoneNumbers, setPhoneNumbers] = useState([
-    { 
-      name: 'Arto Hellas',
-      id: 1
-    }
-  ])
-  const [newPhoneNumber, setNewPhoneNumber] = useState('')
+  const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
+  const [newPerson, setNewPerson] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const newContactToAdd = {
-      id: Math.random() * 10000, // This is an anti-pattern too, but is only for this exercise
-      name: newPhoneNumber
+    const newPersonToAdd = {
+      name: newPerson.trim()
     }
 
-    setPhoneNumbers([...phoneNumbers, newContactToAdd])
-    setNewPhoneNumber('')
+    const findPersonInContacts = persons.some(person => person.name === newPersonToAdd.name)
+    if (findPersonInContacts) {
+      alert(`${newPersonToAdd.name} is already added to phonebook`)
+      setNewPerson('')
+      return
+    }
+
+    setPersons([...persons, newPersonToAdd])
+    setNewPerson('')
   }
 
   const handleChange = (e) => {
-    setNewPhoneNumber(e.target.value)
+    setNewPerson(e.target.value)
   }
 
   return (
     <>
       <h1>Phonebook</h1>
       <form onSubmit={handleSubmit}>
-        <input value={newPhoneNumber} onChange={handleChange}/>
+        <input value={newPerson} onChange={handleChange}/>
         <button type='submit'>add</button>
       </form>
       <h2>Numbers</h2>
-      {phoneNumbers.map(phoneNumber => <p key={phoneNumber.id}>{phoneNumber.name}</p>)}
+      {persons.map((phoneNumber, i) => <p key={i}>{phoneNumber.name}</p>)}
     </>
   )
 }
