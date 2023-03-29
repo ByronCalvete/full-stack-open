@@ -1,0 +1,54 @@
+{
+  "persons": [
+    { 
+      "name": "Arto Hellas",
+      "number": "0401234567",
+      "id": 1
+    },
+    { 
+      "name": "Byron Calvete",
+      "number": "1234567890",
+      "id": 2
+    },
+    { 
+      "name": "Lebron James",
+      "number": "3213124235",
+      "id": 3
+    },
+    { 
+      "name": "Luka Doncic",
+      "number": "3247457865",
+      "id": 4
+    },
+    { 
+      "name": "Ja Morat",
+      "number": "2439458677",
+      "id": 5
+    },
+    { 
+      "name": "Chris Paul",
+      "number": "9320983467",
+      "id": 6
+    },
+    { 
+      "name": "Diana Taurasi",
+      "number": "2389823756",
+      "id": 7
+    },
+    { 
+      "name": "Ada Lovelace",
+      "number": "3944532352",
+      "id": 8
+    },
+    { 
+      "name": "Dan Abramov",
+      "number": "1243234345",
+      "id": 9
+    },
+    { 
+      "name": "Mary Poppendieck",
+      "number": "3923423122",
+      "id": 10
+    }
+  ]
+}
