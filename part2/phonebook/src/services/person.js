@@ -17,3 +17,9 @@ export const deletePerson = (id) => {
   const request = axios.delete(`${baseUrl}/${id}`)
   return request.then()
 }
+
+export const updatePerson = async (id, updatePerson) => {
+  const request = axios.put(`${baseUrl}/${id}`, updatePerson)
+  const response = await request
+  return response.data
+}

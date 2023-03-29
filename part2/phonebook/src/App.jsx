@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { getAllPerson, createPerson, deletePerson } from './services/person'
+import { getAllPerson, createPerson, deletePerson, updatePerson } from './services/person'
 
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
@@ -24,12 +24,21 @@ const App = () => {
       number: newNumber
     }
 
-    const findPersonInContacts = persons.some(person => person.name === newPersonToAdd.name)
-    if (findPersonInContacts) {
-      alert(`${newPersonToAdd.name} is already added to phonebook`)
+    const findPersonInContacts = persons.find(person => person.name === newPersonToAdd.name)
+    if (findPersonInContacts !== undefined) {
+      if (confirm(`${findPersonInContacts.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const editedPersonPhone = { ...findPersonInContacts, number: newPersonToAdd.number }
+        updatePerson(findPersonInContacts.id, editedPersonPhone)
+          .then(updatedPerson => {
+            setPersons(persons.map(person => person.id === findPersonInContacts.id ? updatedPerson : person))
+            setNewPerson('')
+            setNewNumber('')
+            return null
+          })
+      }
       setNewPerson('')
       setNewNumber('')
-      return
+      return null
     }
 
     createPerson(newPersonToAdd)
@@ -54,10 +63,11 @@ const App = () => {
 
   const handleClickDelete = (id) => {
     const personToDelete = persons.find(person => person.id === id)
-    confirm(`Delete ${personToDelete.name}?`)
-    deletePerson(id)
-    const personsWithoutDelete = persons.filter(person => person.id !== personToDelete.id)
-    setPersons(personsWithoutDelete)
+    if (confirm(`Delete ${personToDelete.name}?`)) {
+      deletePerson(id)
+      const personsWithoutDelete = persons.filter(person => person.id !== personToDelete.id)
+      setPersons(personsWithoutDelete)
+    }
   }
 
   return (
