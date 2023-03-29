@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { getAllPerson, createPerson } from './services/person'
+import { getAllPerson, createPerson, deletePerson } from './services/person'
 
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
@@ -52,6 +52,14 @@ const App = () => {
     setFiltered(e.target.value)
   }
 
+  const handleClickDelete = (id) => {
+    const personToDelete = persons.find(person => person.id === id)
+    confirm(`Delete ${personToDelete.name}?`)
+    deletePerson(id)
+    const personsWithoutDelete = persons.filter(person => person.id !== personToDelete.id)
+    setPersons(personsWithoutDelete)
+  }
+
   return (
     <>
       <h1>Phonebook</h1>
@@ -67,7 +75,11 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filtered={filtered}/>
+      <Persons
+        persons={persons}
+        filtered={filtered}
+        handleClickDelete={handleClickDelete}
+      />
     </>
   )
 }

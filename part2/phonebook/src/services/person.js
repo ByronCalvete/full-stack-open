@@ -12,3 +12,8 @@ export const createPerson = async (newPersonToAdd) => {
   const response = await request
   return response.data
 }
+
+export const deletePerson = (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`)
+  return request.then()
+}
