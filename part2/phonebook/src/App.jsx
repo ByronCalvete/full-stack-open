@@ -14,6 +14,7 @@ const App = () => {
   const [filtered, setFiltered] = useState('')
   const [isCreated, setIsCreated] = useState(false)
   const [updated, setUpdated] = useState('')
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     getAllPerson()
@@ -41,6 +42,12 @@ const App = () => {
               setUpdated('')
             }, 2000)
             return null
+          })
+          .catch(error => {
+            setIsError(findPersonInContacts.name)
+            setTimeout(() => {
+              setIsError(false)
+            }, 2000)
           })
       }
       setNewPerson('')
@@ -84,8 +91,9 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      {isCreated && <Notification person={persons.at(-1).name}/>}
-      {updated && <Notification person={updated} update={true}/>}
+      {isCreated && <Notification person={persons.at(-1).name} type='Added'/>}
+      {updated && <Notification person={updated} type='Updated'/>}
+      {isError && <Notification person={isError} type='has already been removed from server'/>}
       <Filter
         handleChangeFilter={handleChangeFilter}
         filtered={filtered}

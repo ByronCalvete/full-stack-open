@@ -1,8 +1,12 @@
-const Notification = ({ person, update = false }) => {
+const Notification = ({ person, type }) => {
   return (
-    <div className="person">
-      {update ? 'Updated' : 'Added'} {person}
-    </div>
+    <>
+      {
+        type === 'Added' || type === 'Updated'
+          ? <div className="person success">{type} {person}</div>
+          : <div className="person error">{person} {type}</div>
+      }
+    </>
   )
 }
 
