@@ -5,12 +5,15 @@ import { getAllPerson, createPerson, deletePerson, updatePerson } from './servic
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newPerson, setNewPerson] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filtered, setFiltered] = useState('')
+  const [isCreated, setIsCreated] = useState(false)
+  const [updated, setUpdated] = useState('')
 
   useEffect(() => {
     getAllPerson()
@@ -33,6 +36,10 @@ const App = () => {
             setPersons(persons.map(person => person.id === findPersonInContacts.id ? updatedPerson : person))
             setNewPerson('')
             setNewNumber('')
+            setUpdated(updatedPerson.name)
+            setTimeout(() => {
+              setUpdated('')
+            }, 2000)
             return null
           })
       }
@@ -46,6 +53,10 @@ const App = () => {
         setPersons([...persons, createdPerson])
         setNewPerson('')
         setNewNumber('')
+        setIsCreated(true)
+        setTimeout(() => {
+          setIsCreated(false)
+        }, 2000)
       })
   }
 
@@ -73,6 +84,8 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
+      {isCreated && <Notification person={persons.at(-1).name}/>}
+      {updated && <Notification person={updated} update={true}/>}
       <Filter
         handleChangeFilter={handleChangeFilter}
         filtered={filtered}
