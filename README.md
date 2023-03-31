@@ -16,3 +16,9 @@
 - Getting data from server
 - Altering data in server
 - Adding styles to React app
+
+## [Part 3 - Programming a server with NodeJS and Express](./part3)
+- Node.js and Express
+- Deploying app to internet
+- Saving data to MongoDB
+- Validation and ESLint
