@@ -61,9 +61,19 @@ const generatedId = () => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if(!body.name) {
-    return response.status(404).json({
-      error: 'name is missing'
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: !body.name
+        ? 'name is missing'
+        : 'number is missing'
+    })
+  }
+
+  const personExists = persons.map(person => person.name === body.name)
+
+  if (personExists) {
+    return response.status(400).json({
+      error: `The person with name ${body.name} already exists in the phonebook`
     })
   }
 
