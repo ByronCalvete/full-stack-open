@@ -3,7 +3,12 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+morgan.token('data', (request) => {
+  return request.method === 'POST' && JSON.stringify(request.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] :response-time ms :data'))
 
 let persons = [
   {
@@ -71,9 +76,9 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const personExists = persons.map(person => person.name === body.name)
+  const personExists = persons.filter(person => person.name === body.name)
 
-  if (personExists) {
+  if (personExists.length > 0) {
     return response.status(400).json({
       error: `The person with name ${body.name} already exists in the phonebook`
     })
@@ -87,7 +92,7 @@ app.post('/api/persons', (request, response) => {
 
   persons = [...persons, person]
   response.json(persons)
-})  
+})
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
