@@ -1,8 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const cors = require('cors')
 
 app.use(express.json())
+app.use(cors())
 
 morgan.token('data', (request) => {
   return request.method === 'POST' && JSON.stringify(request.body)
@@ -91,7 +93,7 @@ app.post('/api/persons', (request, response) => {
   }
 
   persons = [...persons, person]
-  response.json(persons)
+  response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
