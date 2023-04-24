@@ -19,17 +19,21 @@ app.get('/', (request, response) => {
   response.send('<h1>This is a phonebook application backend</h1>')
 })
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   const date = new Date()
-  Person.countDocuments().then(count => {
-    response.send(`<p>Phone has info for ${count} people<br/><br/>${date}</p>`)
-  })
+  Person.countDocuments()
+    .then(count => {
+      response.send(`<p>Phone has info for ${count} people<br/><br/>${date}</p>`)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -44,7 +48,7 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
@@ -60,10 +64,12 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   })
 
-  person.save().then(person => {
-    console.log('person saved!')
-    response.json(person)
-  })
+  person.save()
+    .then(person => {
+      console.log('person saved!')
+      response.json(person)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -71,7 +77,28 @@ app.delete('/api/persons/:id', (request, response) => {
     .then(result => {
       response.status(204).end()
     })
+    .catch(error =>  next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({
+    error: 'unknown endpoint'
+  })
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = 3001
 app.listen(PORT, () => {
