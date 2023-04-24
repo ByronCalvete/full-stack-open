@@ -80,6 +80,20 @@ app.delete('/api/persons/:id', (request, response) => {
     .catch(error =>  next(error))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const personNumber = {
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, personNumber, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({
     error: 'unknown endpoint'
