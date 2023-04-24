@@ -27,7 +27,9 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
   const date = new Date()
-  response.send(`<p>Phone has info for ${persons.length} people<br/><br/>${date}</p>`)
+  Person.countDocuments().then(count => {
+    response.send(`<p>Phone has info for ${count} people<br/><br/>${date}</p>`)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -42,13 +44,6 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-const generatedId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(person => person.id))
-    : 0
-  return maxId + 1
-}
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -60,22 +55,23 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const personExists = persons.filter(person => person.name === body.name)
+  // const personExists = persons.filter(person => person.name === body.name)
 
-  if (personExists.length > 0) {
-    return response.status(400).json({
-      error: `The person with name ${body.name} already exists in the phonebook`
-    })
-  }
+  // if (personExists.length > 0) {
+  //   return response.status(400).json({
+  //     error: `The person with name ${body.name} already exists in the phonebook`
+  //   })
+  // }
 
-  const person = {
-    id: generatedId(),
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
+  })
 
-  persons = [...persons, person]
-  response.json(person)
+  person.save().then(person => {
+    console.log('person saved!')
+    response.json(person)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
