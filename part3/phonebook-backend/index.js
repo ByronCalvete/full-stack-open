@@ -55,14 +55,6 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  // const personExists = persons.filter(person => person.name === body.name)
-
-  // if (personExists.length > 0) {
-  //   return response.status(400).json({
-  //     error: `The person with name ${body.name} already exists in the phonebook`
-  //   })
-  // }
-
   const person = new Person({
     name: body.name,
     number: body.number
@@ -75,9 +67,10 @@ app.post('/api/persons', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
 })
 
 const PORT = 3001
