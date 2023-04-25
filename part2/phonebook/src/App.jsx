@@ -65,6 +65,14 @@ const App = () => {
           setIsCreated(false)
         }, 2000)
       })
+      .catch(error => {
+        setIsError(error.response.data.error)
+        setNewPerson('')
+        setNewNumber('')
+        setTimeout(() => {
+          setIsError(false)
+        }, 2000)
+      })
   }
 
   const handleChangeName = (e) => {
