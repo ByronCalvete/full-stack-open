@@ -44,7 +44,7 @@ const App = () => {
             return null
           })
           .catch(error => {
-            setIsError(findPersonInContacts.name)
+            setIsError(error.response.data.error)
             setTimeout(() => {
               setIsError(false)
             }, 2000)
@@ -101,7 +101,7 @@ const App = () => {
       <h1>Phonebook</h1>
       {isCreated && <Notification person={persons.at(-1).name} type='Added'/>}
       {updated && <Notification person={updated} type='Updated'/>}
-      {isError && <Notification person={isError} type='has already been removed from server'/>}
+      {isError && <Notification person={isError} />}
       <Filter
         handleChangeFilter={handleChangeFilter}
         filtered={filtered}

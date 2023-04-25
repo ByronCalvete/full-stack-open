@@ -16,7 +16,6 @@ const PersonForm = ({ handleSubmit, handleChangeName, handleChangeNumber, newPer
             <td>number:</td>
             <td>
               <input
-                type='number'
                 value={newNumber}
                 onChange={handleChangeNumber}
               />
