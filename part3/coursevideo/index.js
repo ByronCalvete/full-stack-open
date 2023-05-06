@@ -1,23 +1,28 @@
 const express = require('express')
+const logger = require('./loggerMiddleware')
+const cors = require('cors')
 
 const app = express()
+
 app.use(express.json())
+app.use(cors())
+app.use(logger)
 
 let notes = [
   {
-    "id": 1,
-    "content": "Contenido de la nota 1",
-    "important": true
+    id: 1,
+    content: 'Contenido de la nota 1',
+    important: true
   },
   {
-    "id": 2,
-    "content": "Contenido de la nota 2",
-    "important": false
+    id: 2,
+    content: 'Contenido de la nota 2',
+    important: false
   },
   {
-    "id": 3,
-    "content": "Contenido de la nota 3",
-    "important": false
+    id: 3,
+    content: 'Contenido de la nota 3',
+    important: false
   }
 ]
 
@@ -65,15 +70,20 @@ app.post('/api/notes', (request, response) => {
   const newNote = {
     id: generatedId(),
     content: body.content,
-    important: typeof body.important !== undefined ? body.important : false
+    important: typeof body.important !== 'undefined' ? body.important : false
   }
 
   notes = [...notes, newNote]
   response.status(201).json(newNote)
 })
 
+app.use((request, response) => {
+  response.status(404).json({
+    error: 'Not found'
+  })
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-
