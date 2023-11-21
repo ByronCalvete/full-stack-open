@@ -1,6 +1,6 @@
-const Display = ({ counter }) => {
+const Display = ({ value }) => {
  return (
-  <div>{counter}</div>
+  <div>{value}</div>
  )
 }
 
