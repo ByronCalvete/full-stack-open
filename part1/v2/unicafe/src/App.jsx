@@ -11,6 +11,8 @@ const App = () => {
   const handleGood = () => setGood(good + 1)
   const handleNeutral = () => setNeutral(neutral + 1)
   const handleBad = () => setBad(bad + 1)
+
+  const totalFeedback = good + neutral + bad
   
   return(
     <>
@@ -19,7 +21,11 @@ const App = () => {
       <Button onClick={handleNeutral} label='Neutral'/>
       <Button onClick={handleBad} label='Bad'/>
       <h3>Statistics</h3>
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      {totalFeedback !== 0
+        ? <Statistics good={good} neutral={neutral} bad={bad} total={totalFeedback}/>
+        : 'No feedback given 😢'
+      }
+      
     </>
   )
 }
