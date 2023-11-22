@@ -1,17 +1,14 @@
-const Statistics = ({ good, neutral, bad, total }) => {
-  const average = (good - bad)/total
-  const positive = (good / total)*100
+import StatisticLine from './StatisticLine'
 
-  return(
-    <>
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {total}</p>
-      <p>Average {average ? average : 0}</p>
-      <p>Positive {positive ? positive : 0}%</p>
-    </>
-  )
-}
+const Statistics = ({ good, neutral, bad, total }) => (
+  <>
+    <StatisticLine name='Good' value={good} />
+    <StatisticLine name='Neutral' value={neutral} />
+    <StatisticLine name='Bad' value={bad} />
+    <StatisticLine name='All' value={total} />
+    <StatisticLine name='Average' value={(good - bad) / total} />
+    <StatisticLine name='Positive' value={(good / total) * 100} />
+  </>
+)
 
 export default Statistics
