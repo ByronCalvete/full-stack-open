@@ -8,7 +8,16 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault()
-    setPersons([ ...persons, { name: newPerson } ])
+    const personToAdd = {
+      name: newPerson.trim()
+    }
+    const isPersonInPhonebook = persons.some(person => person.name === personToAdd.name)
+    if (isPersonInPhonebook) {
+      alert(`${personToAdd.name} is already added to phonebook`)
+      setNewPerson('')
+      return
+    }
+    setPersons([ ...persons, personToAdd ])
     setNewPerson('')
   }
 
