@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+
+import noteService from './services/notes'
 import Note from './components/Note'
 
 const App = () => {
@@ -8,10 +9,10 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/notes')
-      .then(response => {
-        setNotes(response.data)
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
   }, [])
 
@@ -21,25 +22,12 @@ const App = () => {
       content: newNote,
       important: Math.random() < 0.5,
     }
-
-    axios
-      .post('http://localhost:3001/notes', noteObject)
-      .then(response => {
-        console.log(response)
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes([ ...notes, returnedNote ])
+        setNewNote('')
       })
-
-    // fetch('http://localhost:3001/notes', {
-    //   method: 'POST',
-    //   body: JSON.stringify(noteObject),
-    //   headers: {
-    //     'Content-Type': 'application/json; charset=UTF-8'
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(json => console.log(json))
-    
-    setNotes([ ...notes, noteObject ])
-    setNewNote('')
   }
 
   const handleNoteChange = (e) => {
@@ -47,27 +35,18 @@ const App = () => {
   }
 
   const toggleImportance = (id) => {
-    const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(note => note.id === id)
     const changedNote = { ...note, important: !note.important }
 
-    axios
-      .put(url, changedNote)
-      .then(response => {
-        setNotes(notes.map(note => note.id !== id ? note : response.data))
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-    
-    // fetch(url, {
-    //   method: 'PUT',
-    //   body: JSON.stringify(changedNote),
-    //   headers: {
-    //     'Content-type': 'application/json; charset=UTF-8'
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(json => {
-    //     setNotes(notes.map(note => note.id === id ? json : note))
-    //   })
+      .catch(error => {
+        alert(`the note ${note.content} was already delete from server (and this is the erros ${error})`)
+        setNotes(notes.filter(note => note.id !== id))
+      })
   }
 
   const notesToShow = showAll
