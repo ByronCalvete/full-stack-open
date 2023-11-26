@@ -20,16 +20,54 @@ const App = () => {
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: notes.length + 1
     }
+
+    axios
+      .post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        console.log(response)
+      })
+
+    // fetch('http://localhost:3001/notes', {
+    //   method: 'POST',
+    //   body: JSON.stringify(noteObject),
+    //   headers: {
+    //     'Content-Type': 'application/json; charset=UTF-8'
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(json => console.log(json))
     
     setNotes([ ...notes, noteObject ])
     setNewNote('')
   }
 
   const handleNoteChange = (e) => {
-    console.log(e.target.value)
     setNewNote(e.target.value)
+  }
+
+  const toggleImportance = (id) => {
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(note => note.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    axios
+      .put(url, changedNote)
+      .then(response => {
+        setNotes(notes.map(note => note.id !== id ? note : response.data))
+      })
+    
+    // fetch(url, {
+    //   method: 'PUT',
+    //   body: JSON.stringify(changedNote),
+    //   headers: {
+    //     'Content-type': 'application/json; charset=UTF-8'
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     setNotes(notes.map(note => note.id === id ? json : note))
+    //   })
   }
 
   const notesToShow = showAll
@@ -46,7 +84,7 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map(note => 
-          <Note key={note.id} content={note.content} />)
+          <Note key={note.id} note={note} toggleImportance={() => toggleImportance(note.id)}/>)
         }
       </ul>
       <form onSubmit={addNote}>
