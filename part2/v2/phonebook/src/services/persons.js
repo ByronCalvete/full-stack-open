@@ -24,3 +24,10 @@ export const createPerson = (newPerson) => {
   //   .then(json => json)
   // return request
 }
+
+export const deletePerson = (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`)
+  return request
+  // const request = fetch(`${baseUrl}/${id}`, { method: 'DELETE' })
+  // return request
+}
