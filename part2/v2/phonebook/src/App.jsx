@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { getPersons, createPerson, deletePerson } from './services/persons'
+import { getPersons, createPerson, deletePerson, updatePerson } from './services/persons'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -27,10 +27,18 @@ const App = () => {
     }
     const isPersonInPhonebook = persons.find(person => person.name.toLowerCase() === personToAdd.name.toLowerCase())
     if (isPersonInPhonebook) {
-      alert(`${personToAdd.name} is already added to phonebook`)
+      if (confirm(`${personToAdd.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const personUpdated = { ...isPersonInPhonebook, number: personToAdd.number }
+        updatePerson(personUpdated.id, personUpdated)
+          .then(newPerson => {
+            setPersons(persons.map(person => person.id !== personUpdated.id ? person : newPerson))
+            setNewPerson('')
+            setNewNumber('')
+          })
+      }
       setNewPerson('')
       setNewNumber('')
-      return
+      return null
     }
     createPerson(personToAdd)
       .then(personCreated => {
