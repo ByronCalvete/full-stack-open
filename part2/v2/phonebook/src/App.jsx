@@ -30,9 +30,26 @@ const App = () => {
       setNewNumber('')
       return
     }
-    setPersons([ ...persons, personToAdd ])
-    setNewPerson('')
-    setNewNumber('')
+    axios
+      .post('http://localhost:3001/persons', personToAdd)
+      .then(response => {
+        setPersons([ ...persons, response.data ])
+        setNewPerson('')
+        setNewNumber('')
+      })
+    // fetch('http://localhost:3001/persons', {
+    //   method: 'POST',
+    //   body: JSON.stringify(personToAdd),
+    //   headers: {
+    //     'Content-type': 'application/json; charset=UTF-8'
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(response => {
+    //     setPersons([ ...persons, response ])
+    //     setNewPerson('')
+    //     setNewNumber('')
+    //   })
   }
 
   const handleNewPerson = (e) => {
