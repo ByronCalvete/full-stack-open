@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+
+import { getPersons, createPerson } from './services/persons'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -12,9 +13,10 @@ const App = () => {
   const [filterPerson, setFilterPerson] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
+    getPersons()
+      .then(persons => {
+        setPersons(persons)
+      })
   }, [])
 
   const addPerson = (e) => {
@@ -23,33 +25,19 @@ const App = () => {
       name: newPerson.trim(),
       number: newNumber
     }
-    const isPersonInPhonebook = persons.find(person => person.name === personToAdd.name)
+    const isPersonInPhonebook = persons.find(person => person.name.toLowerCase() === personToAdd.name.toLowerCase())
     if (isPersonInPhonebook) {
       alert(`${personToAdd.name} is already added to phonebook`)
       setNewPerson('')
       setNewNumber('')
       return
     }
-    axios
-      .post('http://localhost:3001/persons', personToAdd)
-      .then(response => {
-        setPersons([ ...persons, response.data ])
+    createPerson(personToAdd)
+      .then(personCreated => {
+        setPersons([ ...persons, personCreated ])
         setNewPerson('')
         setNewNumber('')
       })
-    // fetch('http://localhost:3001/persons', {
-    //   method: 'POST',
-    //   body: JSON.stringify(personToAdd),
-    //   headers: {
-    //     'Content-type': 'application/json; charset=UTF-8'
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     setPersons([ ...persons, response ])
-    //     setNewPerson('')
-    //     setNewNumber('')
-    //   })
   }
 
   const handleNewPerson = (e) => {
