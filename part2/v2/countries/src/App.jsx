@@ -1,28 +1,41 @@
 import { useState, useEffect } from 'react'
 
+import DisplayCountries from './components/DisplayCountries'
+
 const App = () => {
-  const [country, setCountry] = useState('')
+  const [countryName, setCountryName] = useState('')
   const [countries, setCountries] = useState([])
 
   useEffect(() => {
-    fetch('https://studies.cs.helsinki.fi/restcountries/api/all')
-      .then(response => response.json())
+    if (countryName) {
+      fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error('Something went wrong')
+      })
       .then(json => setCountries(json))
-  }, [])
+      .catch(error => (
+        setCountries([])
+      ))
+    }
+    setCountries([])
+  }, [countryName])
 
   const handleChange = (e) => {
-    console.log(e.target.value)
-    setCountry(e.target.value)
+    setCountryName(e.target.value)
   }
 
-  console.log(countries)
-
   return (
-    <p>
-      find countries <input value={country} onChange={handleChange}/>
-    </p>
+    <>
+      <p>
+        find countries <input value={countryName} onChange={handleChange}/>
+      </p>
+      {countries.length > 0 && <DisplayCountries countries={countries} />}
+    </>
   )
 }
 
 export default App
-
+9
