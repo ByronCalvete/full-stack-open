@@ -22,3 +22,21 @@
 - Deploying app to internet
 - Saving data to MongoDB
 - Validation and ESLint
+
+## [Part 4 - Testing Express servers, user administration](./part4)
+- Structure of backend application, introduction to testing
+- Testing the backend
+- User administration
+- Token authentication
+
+## [Part 5 - Testing React apps](./part5)
+- Login in frontend
+- props.children and proptypes
+- Testing React apps
+- End to end testing
+
+## [Part 6 - Advanced state management](./part6)
+- Flux-architecture and Redux
+- Many reducers
+- Communitating with server in a redux application
+- React Query, useReducer and the context
