@@ -1,4 +1,4 @@
-# [Full Stack Open - University of Helsinki](https://fullstackopen.com/en/)
+# [Full Stack Open - University of Helsinki 🔨](https://fullstackopen.com/en/)
 
 ## [Part 0 - Fundamentals of Web apps](./part0)
 - General info
