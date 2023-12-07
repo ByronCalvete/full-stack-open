@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let notes = [
   {
     id: 1,
@@ -25,6 +27,51 @@ app.get('/', (request, response) => {
 
 app.get('/api/notes', (request, response) => {
   response.json(notes)
+})
+
+app.get('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const note = notes.find(note => note.id === id)
+
+  if (note) {
+    response.json(note)
+  } else {
+    response.statusMessage = 'Current note does not exist'
+    response.status(404).end()
+  }
+})
+
+const generateId = () => {
+  const maxId = notes.length > 0
+    ? Math.max(...notes.map(note => note.id))
+    : 0
+  return maxId  + 1
+}
+
+app.post('/api/notes', (request, response) => {
+  const body = request.body
+
+  if (!body.content) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
+  const newNote = {
+    content: body.content,
+    important: body.important || false,
+    id: generateId()
+  }
+
+  notes = [ ...notes, newNote ]
+  response.status(201).json(newNote)
+})
+
+app.delete('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  notes = notes.filter(note => note.id !== id)
+
+  response.status(204).end()
 })
 
 const PORT = 3001
