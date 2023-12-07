@@ -76,6 +76,14 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
+  const nameExist = persons.filter(person => person.name === body.name)
+
+  if (nameExist.length > 0) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
+  }
+
   const newPerson = {
     name: body.name,
     number: body.number,
