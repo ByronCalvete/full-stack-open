@@ -1,7 +1,9 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -77,6 +79,15 @@ app.post('/api/notes', (request, response) => {
   response.status(201).json(newNote)
 })
 
+app.put('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const note = notes.find(note => note.id === id)
+  const updatedNote = { ...note, important: !note.important }
+
+  notes = notes.map(note => note.id === id ? updatedNote : note)
+  response.json(updatedNote)
+})
+
 app.delete('/api/notes/:id', (request, response) => {
   const id = Number(request.params.id)
   notes = notes.filter(note => note.id !== id)
@@ -90,7 +101,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
