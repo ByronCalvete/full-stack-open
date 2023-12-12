@@ -27,16 +27,19 @@ app.get('/api/notes', (request, response) => {
   })
 })
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
   const id = request.params.id
 
   Note.findById(id)
     .then(note => {
-      response.json(note)
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
     })
     .catch(error => {
-      response.statusMessage = 'Current note does not exist'
-      response.status(404).end()
+      next(error)
     })
 })
 
@@ -60,19 +63,30 @@ app.post('/api/notes', (request, response) => {
 })
 
 app.put('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id)
-  const updatedNote = { ...note, important: !note.important }
+  const id = request.params.id
+  const body = request.body
 
-  notes = notes.map(note => note.id === id ? updatedNote : note)
-  response.json(updatedNote)
+  const note = {
+    content: body.content,
+    important: body.important
+  }
+
+  Note.findByIdAndUpdate(id, note, { new: true })
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
-
-  response.status(204).end()
+  const id = request.params.id
+  Note.findByIdAndDelete(id)
+  .then(result => {
+    response.status(204).end()
+  })
+  .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -80,6 +94,16 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
