@@ -24,6 +24,11 @@ const note = new Note({
   important: true
 })
 
+// const note = new Note({
+//   content: process.argv[3],
+//   important: process.argv[4]
+// })
+
 // note.save().then(result => {
 //   console.log('note saved!')
 //   mongoose.connection.close()
