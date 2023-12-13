@@ -31,6 +31,13 @@ const App = () => {
         setNotes([ ...notes, returnedNote ])
         setNewNote('')
       })
+      .catch(error => {
+        setErrorMesssage(`The note is shorter that the minimum allowed length (5)`)
+        setTimeout(() => {
+          setErrorMesssage(null)
+        }, 5000)
+        setNewNote('')
+      })
   }
 
   const handleNoteChange = (e) => {
