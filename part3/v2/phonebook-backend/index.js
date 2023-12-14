@@ -1,4 +1,4 @@
-const express = require('express') 
+const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
@@ -53,7 +53,7 @@ app.get('/api/persons/:id', (request, response, next) => {
         response.json(person)
       } else {
         response.status(404).end()
-      }      
+      }
     })
     .catch(error => {
       next(error)
@@ -112,7 +112,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   const body = request.body
-  
+
   const person = {
     name: body.name,
     number: body.number
