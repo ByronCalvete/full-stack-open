@@ -18,7 +18,16 @@ const personSchema = new mongoose.Schema({
     minLength: 3,
     required: true
   },
-  number: String
+  number: {
+    type: String,
+    minLength: 8,
+    validate: {
+      validator: function(v) {
+        return /\d{2,3}-\d{5,8}/.test(v)
+      }
+    },
+    required: true
+  }
 })
 
 // Replace output "id" instead of "_id" and delete "__v", too

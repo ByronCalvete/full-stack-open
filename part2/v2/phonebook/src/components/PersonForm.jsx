@@ -12,7 +12,6 @@ const PersonForm = ({ addPerson, newPerson, handleNewPerson, newNumber, handleNe
       <div>
         number:
         <input
-          type="number"
           value={newNumber}
           onChange={handleNewNumber}
           required

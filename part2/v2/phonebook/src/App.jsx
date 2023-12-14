@@ -67,7 +67,12 @@ const App = () => {
       .catch(error => {
         setNewPerson('')
         setNewNumber('')
-        setErrorMessage(error.response.data.error)
+        if (error.response.data.name) {
+          setErrorMessage(error.response.data.name.message)
+        } 
+        if (error.response.data.number) {
+          setErrorMessage(`Format error. The number format should be like '123-45667345' or '123-3456756'`)
+        }
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
