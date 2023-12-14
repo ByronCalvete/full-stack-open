@@ -64,6 +64,14 @@ const App = () => {
           setSuccessMessage(null)
         }, 3000)
       })
+      .catch(error => {
+        setNewPerson('')
+        setNewNumber('')
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
   }
 
   const handleNewPerson = (e) => {
