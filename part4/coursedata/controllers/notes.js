@@ -21,7 +21,7 @@ notesRouter.get('/:id', (request, response, next) => {
     .catch(error => {
       next(error)
     })
- })
+})
 
 notesRouter.post('/', (request, response, next) => {
   const body = request.body
@@ -42,7 +42,7 @@ notesRouter.post('/', (request, response, next) => {
 
 notesRouter.delete('/:id', (request, response, next) => {
   const id = request.params.id
-  
+
   Note.findByIdAndDelete(id)
     .then(() => {
       response.status(204).end()
