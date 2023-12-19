@@ -10,11 +10,11 @@ const noteSchema = new mongoose.Schema({
 })
 
 noteSchema.set('toJSON', {
-  transform: (request, response) => {
-    returnedObject.id = returnedbject._id.toString()
+  transform: (request, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
   }
 })
 
-module.exports = mongoose.Model('Note', noteSchema)
+module.exports = mongoose.model('Note', noteSchema)

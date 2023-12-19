@@ -54,14 +54,14 @@ notesRouter.delete('/:id', (request, response, next) => {
 
 notesRouter.put('/:id', (request, response, next) => {
   const id = request.params.id
-  const body = request.params
+  const body = request.body
 
   const note = {
     content: body.content,
     important: body.important
   }
 
-  Note.findByIdAndUpdate(id, note, { new: true })
+  Note.findByIdAndUpdate(id, note, { new: true, runValidators: true, context: 'query' })
     .then(updatedNote => {
       response.json(updatedNote)
     })
