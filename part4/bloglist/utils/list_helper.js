@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const dumy = (blogs) => {
   return 1
 }
@@ -29,8 +30,32 @@ const favoriteBlog = (blogs = []) => {
   return maxVotedBlog
 }
 
+const mostBlogs = (blogs = []) => {
+  if (blogs.length === 0) return 'No blogs yet'
+  // Only authors
+  const authors = blogs.map(blog => blog.author)
+
+  // blogs by author
+  const totalBlogsByAuthor = authors.reduce((list, i) => {
+    list[i] = (list[i] || 0) + 1
+    return list
+  }, {})
+
+  // Number max of blogs
+  const maxBlogs = Math.max(...Object.values(totalBlogsByAuthor))
+  // Name author with most blogs
+  const mostFrecuentAuthor = Object.keys(totalBlogsByAuthor).filter(author => totalBlogsByAuthor[author] === maxBlogs)
+
+  return {
+    author: mostFrecuentAuthor[0],
+    blogs: maxBlogs
+  }
+
+}
+
 module.exports = {
   dumy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
