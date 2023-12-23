@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon --env-file=config.env index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon --env-file=config.env index.js",
     "build:ui": "rm -rf dist && cd ../../part2/v2/coursedata && pnpm run build && cp -r dist ../../../part4/coursedata",
     "lint": "eslint .",
-    "test": "jest --verbose"
+    "test": "NODE_ENV=test jest --verbose --runInBand"
   },
   "keywords": [],
   "author": "Byron Calvete",
