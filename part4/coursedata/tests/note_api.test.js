@@ -8,10 +8,15 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Note.deleteMany({})
-  let noteObject = new Note(helper.initialNotes[0])
-  await noteObject.save()
-  noteObject = new Note(helper.initialNotes[1])
-  await noteObject.save()
+  for (let note of helper.initialNotes) {
+    let noteObject = new Note(note)
+    await noteObject.save()
+  }
+
+  // // Another way to do this with Promise.all
+  // const noteObjects = helper.initialNotes.map(note => new Note(note))
+  // const promiseArray = noteObjects.map(note => note.save())
+  // await Promise.all(promiseArray)
 })
 
 test('notes are returned as json', async () => {
@@ -97,6 +102,21 @@ test('a note can be deleted', async () => {
 
   expect(notesAtEnd).toHaveLength(helper.initialNotes.length - 1)
   expect(contents).not.toContain(noteToDelete.content)
+})
+
+test('a note can be updated', async () => {
+  const notesAtStart = await helper.notesInDb()
+  const noteUpdated = { ...notesAtStart[0], content: 'Hi my friends!' }
+
+  await api
+    .put(`/api/notes/${noteUpdated.id}`)
+    .send(noteUpdated)
+    .expect(200)
+
+  const notesAtEnd = await helper.notesInDb()
+  const contents = notesAtEnd.map(r => r.content)
+  expect(notesAtEnd).toHaveLength(helper.initialNotes.length)
+  expect(contents).toContain('Hi my friends!')
 })
 
 afterAll(async () => {
