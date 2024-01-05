@@ -48,6 +48,14 @@ test('a specific blog is within the returned blogs', async () => {
   expect(titles).toContain('Rocky, the most spoiled dog in the world')
 })
 
+test('verifes that id is the only blog post identifier property', async () => {
+  const response = await api.get('/api/blogs')
+  const blogs = response.body
+
+  expect(blogs[0].id).toBeDefined()
+  expect(blogs[0]._id).not.toBeDefined()
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
