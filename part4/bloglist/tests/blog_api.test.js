@@ -79,6 +79,25 @@ test('a valid blog post can be added', async () => {
   expect(titles).toContain('New blog for testing POST method')
 })
 
+test('check the default value of likes is zero when don\'t defined it', async () => {
+  const newBlog = {
+    title: 'New blog for testing like default value',
+    author: 'Testing likes delfault',
+    url: 'www.example.com/likes-default',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const lastAddedBlog = response.body.at(-1)
+
+  expect(lastAddedBlog.likes).toBe(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
