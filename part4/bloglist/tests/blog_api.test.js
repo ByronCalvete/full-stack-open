@@ -130,6 +130,21 @@ test('blog without url is not added', async () => {
   expect(response.body).toHaveLength(initialBlogs.length)
 })
 
+test('delete blog post', async () => {
+  const blogPostsAtStart = await api.get('/api/blogs')
+  const blogPostToDelete = blogPostsAtStart.body[0]
+
+  await api
+    .delete(`/api/blogs/${blogPostToDelete.id}`)
+    .expect(204)
+
+  const blogPostsAtEnd = await api.get('/api/blogs')
+  const titles = blogPostsAtEnd.body.map(blog => blog.title)
+
+  expect(blogPostsAtEnd.body).toHaveLength(initialBlogs.length - 1)
+  expect(titles).not.toContain(blogPostToDelete.title)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
