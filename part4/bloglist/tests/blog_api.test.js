@@ -38,11 +38,15 @@ describe('verify the initial blog posts saved', () => {
 
 describe('addition of new blog post', () => {
   test('a valid blog post can be added', async () => {
+    const users = await helper.usersInDb()
+    const id = users[0].id
+
     const newBlog = {
       title: 'New blog for testing POST method',
       author: 'Testing POST',
       url: 'www.example.com/test-post',
-      likes: 3
+      likes: 3,
+      userId: id
     }
 
     await api
@@ -61,10 +65,14 @@ describe('addition of new blog post', () => {
   })
 
   test('check the default value of likes is zero when don\'t defined it', async () => {
+    const users = await helper.usersInDb()
+    const id = users[0].id
+
     const newBlog = {
       title: 'New blog for testing like default value',
       author: 'Testing likes delfault',
       url: 'www.example.com/likes-default',
+      userId: id
     }
 
     await api
@@ -80,10 +88,14 @@ describe('addition of new blog post', () => {
   })
 
   test('blog without title is not added', async () => {
+    const users = await helper.usersInDb()
+    const id = users[0].id
+
     const newBlog = {
       author: 'Test with no title',
       url: 'www.example.com/no-title',
-      likes: 2
+      likes: 2,
+      userId: id
     }
 
     await api
@@ -96,10 +108,14 @@ describe('addition of new blog post', () => {
   })
 
   test('blog without url is not added', async () => {
+    const users = await helper.usersInDb()
+    const id = users[0].id
+
     const newBlog = {
       title: 'Blog without url',
       author: 'Myself',
-      likes: 4
+      likes: 4,
+      userId: id
     }
 
     await api

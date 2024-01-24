@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Molecular habits by Rocky",
+  "author": "James Clear",
+  "url": "www.example.com/rocky",
+  "likes": 10,
+  "userId": "65b14f9a5154cef185472356"
+}
