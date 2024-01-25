@@ -49,9 +49,17 @@ describe('addition of new blog post', () => {
       userId: id
     }
 
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -75,9 +83,17 @@ describe('addition of new blog post', () => {
       userId: id
     }
 
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -98,9 +114,17 @@ describe('addition of new blog post', () => {
       userId: id
     }
 
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(400)
 
     const blogs = await helper.blogsInDb()
@@ -118,9 +142,17 @@ describe('addition of new blog post', () => {
       userId: id
     }
 
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(400)
 
     const blogs = await helper.blogsInDb()

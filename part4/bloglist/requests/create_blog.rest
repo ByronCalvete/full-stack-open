@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvY2t5IiwiaWQiOiI2NWIxNGY5YTUxNTRjZWYxODU0NzIzNTYiLCJpYXQiOjE3MDYyMTE5NDgsImV4cCI6MTcwNjIxNTU0OH0.iIGZkdIxEBqnYxB-K08_k9JfroTU7We3BVgreg3wFlA
 
 {
-  "title": "Molecular habits by Rocky",
-  "author": "James Clear",
-  "url": "www.example.com/rocky",
+  "title": "Blog with token authentication",
+  "author": "Pro Pro",
+  "url": "www.example.com/auth",
   "likes": 10,
   "userId": "65b14f9a5154cef185472356"
 }
