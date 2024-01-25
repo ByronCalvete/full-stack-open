@@ -4,6 +4,7 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
 
+// Isolate the token from authorization header
 const getTokenFrom = (request) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.startsWith('bearer ')) {
@@ -24,7 +25,9 @@ blogsRouter.post('/', async (request, response) => {
 
   const decodedToken = jwt.verify(getTokenFrom(request), config.SECRET)
   if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
+    return response.status(401).json({
+      error: 'token invalid'
+    })
   }
 
   const user = await User.findById(decodedToken.id)
