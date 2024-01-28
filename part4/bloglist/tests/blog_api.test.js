@@ -175,8 +175,16 @@ describe('delete blog post', () => {
     const blogPostsAtStart = await helper.blogsInDb()
     const blogPostToDelete = blogPostsAtStart[0]
 
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .delete(`/api/blogs/${blogPostToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
     const blogPostsAtEnd = await helper.blogsInDb()

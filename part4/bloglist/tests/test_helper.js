@@ -6,13 +6,15 @@ const initialBlogs = [
     title: 'Rocky, the most spoiled dog in the world',
     author: 'Simon Tolomeo',
     url: 'www.example.com/rocky',
-    likes: 2
+    likes: 2,
+    user: '65b6ca368a3701fb8f5f8e3d'
   },
   {
     title: 'Blogpost 2',
     author: 'Simon Tolomeo Jr.',
     url: 'www.example.com/second',
-    likes: 4
+    likes: 4,
+    user: '65b6ca368a3701fb8f5f8e3d'
   },
 ]
 
