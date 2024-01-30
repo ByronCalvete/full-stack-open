@@ -8,28 +8,57 @@ const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  const users = await helper.usersInDb()
+  const user = users && users[0]
 
   for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog)
+    const newBlog = { ...blog, user: user.id }
+    let blogObject = new Blog(newBlog)
     await blogObject.save()
   }
-})
+}, 10000)
 
 describe('verify the initial blog posts saved', () => {
   test('blogs are returned as json', async () => {
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .get('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   test('all blogs are returned', async () => {
-    const blogs = await api.get('/api/blogs')
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
+    const blogs = await api
+      .get('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
     expect(blogs.body).toHaveLength(helper.initialBlogs.length)
   })
 
   test('a specific blog is within the returned blogs', async () => {
-    const response = await api.get('/api/blogs')
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
     const titles = response.body.map(blog => blog.title)
 
     expect(titles).toContain('Rocky, the most spoiled dog in the world')
@@ -158,11 +187,37 @@ describe('addition of new blog post', () => {
     const blogs = await helper.blogsInDb()
     expect(blogs).toHaveLength(helper.initialBlogs.length)
   })
+
+  test('adding a blog when token is not provided', async () => {
+    const users = await helper.usersInDb()
+    const id = users[0].id
+
+    const newBlog = {
+      title: 'Blog without token',
+      author: 'The Patro',
+      likes: 2,
+      userId: id
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+  })
 })
 
 describe('verify identifier', () => {
   test('id is the only blog post identifier property', async () => {
-    const response = await api.get('/api/blogs')
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
     const blogs = response.body
 
     expect(blogs[0].id).toBeDefined()
@@ -200,8 +255,16 @@ describe('update blog post', () => {
     const blogPostsAtStart = await helper.blogsInDb()
     const updatedBlogPost = { ...blogPostsAtStart[0], likes: 10 }
 
+    const resUser = await api
+      .post('/api/login')
+      .send({ username: 'root', name: 'El Root', password: 'secret' })
+      .expect(200)
+
+    const token = resUser._body.token
+
     await api
       .put(`/api/blogs/${updatedBlogPost.id}`)
+      .set('Authorization', `bearer ${token}`)
       .send(updatedBlogPost)
       .expect(200)
 

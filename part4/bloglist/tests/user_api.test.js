@@ -18,7 +18,7 @@ beforeEach(async () => {
   })
 
   await user.save()
-})
+}, 10000)
 
 describe('create a new user', () => {
   test('create user is succeed', async () => {
