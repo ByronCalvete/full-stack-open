@@ -7,14 +7,14 @@ const initialBlogs = [
     author: 'Simon Tolomeo',
     url: 'www.example.com/rocky',
     likes: 2,
-    user: '65b6ca368a3701fb8f5f8e3d'
+    user: '65b8dd13da5ad67b83106d83'
   },
   {
     title: 'Blogpost 2',
     author: 'Simon Tolomeo Jr.',
     url: 'www.example.com/second',
     likes: 4,
-    user: '65b6ca368a3701fb8f5f8e3d'
+    user: '65b8dd13da5ad67b83106d83'
   },
 ]
 
