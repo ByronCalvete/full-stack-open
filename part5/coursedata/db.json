@@ -1,0 +1,49 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "HTML is easy",
+      "important": true
+    },
+    {
+      "id": 2,
+      "content": "Browser can execute only JavaScript",
+      "important": false
+    },
+    {
+      "id": 3,
+      "content": "GET and POST are the most important methods of HTTP protocol",
+      "important": true
+    },
+    {
+      "content": "What is a REST Api?",
+      "important": true,
+      "id": 4
+    },
+    {
+      "content": "JavaScript is awesome",
+      "important": false,
+      "id": 5
+    },
+    {
+      "content": "Python is awesome!",
+      "important": false,
+      "id": 6
+    },
+    {
+      "content": "Golang is awesome, too!",
+      "important": true,
+      "id": 7
+    },
+    {
+      "content": "Kotlin is the next best friend!",
+      "important": true,
+      "id": 8
+    },
+    {
+      "content": "Rust is the new C++",
+      "important": true,
+      "id": 9
+    }
+  ]
+}
