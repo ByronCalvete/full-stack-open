@@ -10,18 +10,25 @@ const Statistics = ({ good, neutral, bad }) => {
   }
 
   return (
-    <>
-      <StatisticLine text='good' value={good} />
-      <StatisticLine text='neutral' value={neutral} />
-      <StatisticLine text='bad' value={bad} />
-      <StatisticLine text='all' value={total} />
-      <StatisticLine text='average' value={total && average.toFixed(3)} />
-      <StatisticLine text='positive' value={total && `${positiveFeedback.toFixed(3)}%`} />
-    </>
+    <table>
+      <tbody>
+        <StatisticLine text='good' value={good} />
+        <StatisticLine text='neutral' value={neutral} />
+        <StatisticLine text='bad' value={bad} />
+        <StatisticLine text='all' value={total} />
+        <StatisticLine text='average' value={total && average.toFixed(3)} />
+        <StatisticLine text='positive' value={total && `${positiveFeedback.toFixed(3)}%`} />
+      </tbody>
+    </table>
   )
 }
 
-const StatisticLine = ({ text, value }) => <p>{text} {value}</p>
+const StatisticLine = ({ text, value }) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+)
 
 const Button = ({ text, handle }) => <button onClick={handle}>{text}</button>
 
