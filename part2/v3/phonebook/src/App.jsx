@@ -22,9 +22,8 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const newPerson = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      name: newName.trim(),
+      number: newNumber
     }
 
     if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase().trim())) {
@@ -55,6 +54,15 @@ const App = () => {
     setFilterName(e.target.value)
   }
 
+  const handleDeletePerson = (id) => {
+    const person = persons.find(person => person.id === id)
+    if (confirm(`Delete ${person.name} ?`)) {
+      personService
+        .deletePerson(id) // This promise does no return data
+        setPersons(persons.filter(person => person.id !== id))
+    }
+  }
+
   return (
     <>
       <h2>Phonebook</h2>
@@ -74,6 +82,7 @@ const App = () => {
       <Persons
         persons={persons}
         filterName={filterName}
+        onDeletePerson={handleDeletePerson}
       />
     </>
   )
