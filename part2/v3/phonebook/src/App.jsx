@@ -34,9 +34,13 @@ const App = () => {
       return null
     }
 
-    setPersons([ ...persons, newPerson ])
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons([ ...persons, response.data ])
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const handleNameChange = (e) => {
