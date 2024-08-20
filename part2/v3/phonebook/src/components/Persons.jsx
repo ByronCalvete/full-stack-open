@@ -1,6 +1,6 @@
 import Person from './Person'
 
-const Persons = ({ persons, filterName, onDeletePerson }) => {
+const Persons = ({ persons, filterName, deletePerson }) => {
   const filteredPersons = persons.filter(person => (
     person.name.toLowerCase().includes(filterName.toLowerCase())
   ))
@@ -11,7 +11,7 @@ const Persons = ({ persons, filterName, onDeletePerson }) => {
         <Person
           key={person.id}
           person={person}
-          onDeletePerson={() => onDeletePerson(person.id)}
+          deletePerson={() => deletePerson(person.id)}
         />
     ))}
     </>
