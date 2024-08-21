@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 
+import Countries from './components/Countries'
 import CountryDetail from './components/CountryDetail'
 
 const App = () => {
   const [ inputValue, setInputValue ] = useState('')
   const [ countries, setCountries ] = useState([])
+  const [ showDetailCountry, setShowDetailCountry ] = useState(false)
 
   useEffect(() => {
     if (inputValue) {
@@ -18,6 +20,13 @@ const App = () => {
 
   const handleChange = (e) => {
     setInputValue(e.target.value)
+    setShowDetailCountry(false)
+  }
+
+  const handleClick = (country) => {
+    setShowDetailCountry(country)
+    setCountries([])
+    setInputValue('')
   }
   
   return (
@@ -30,8 +39,11 @@ const App = () => {
       {
         countries.length === 1
         ? <CountryDetail country={countries[0]} />
-        : countries.length < 10 && countries.map(country => <p key={country.name.official}>{country.name.common}</p>)
+        : countries.length > 10
+          ? <p>Too many matches, specify another filter</p>
+          : <Countries countries={countries} handleClick={handleClick} />
       }
+      { showDetailCountry && <CountryDetail country={showDetailCountry} />}
     </div>
   )
 }
