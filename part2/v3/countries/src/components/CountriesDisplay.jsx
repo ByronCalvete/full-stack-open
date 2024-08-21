@@ -1,4 +1,4 @@
-const Countries = ({ countries, handleClick }) => {
+const CountriesDisplay = ({ countries, handleClick }) => {
   return (
     <>
       {countries.map(country => (
@@ -11,4 +11,4 @@ const Countries = ({ countries, handleClick }) => {
   )
 }
 
-export default Countries
+export default CountriesDisplay

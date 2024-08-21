@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import Countries from './components/Countries'
+import CountriesDisplay from './components/CountriesDisplay'
 import CountryDetail from './components/CountryDetail'
 
 const App = () => {
@@ -41,7 +41,7 @@ const App = () => {
         ? <CountryDetail country={countries[0]} />
         : countries.length > 10
           ? <p>Too many matches, specify another filter</p>
-          : <Countries countries={countries} handleClick={handleClick} />
+          : <CountriesDisplay countries={countries} handleClick={handleClick} />
       }
       { showDetailCountry && <CountryDetail country={showDetailCountry} />}
     </div>
