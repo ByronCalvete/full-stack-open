@@ -11,7 +11,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterName, setFilterName ] = useState('')
-  const [ notificationMessage, setNotificationMessage ] = useState(null)
+  const [ notificationSuccessMessage, setNotificationSuccessMessage ] = useState(null)
+  const [ notificationErrorMessage, setNotificationErrorMessage ] = useState(null)
 
   useEffect(() => {
     personService
@@ -40,9 +41,16 @@ const App = () => {
             setPersons(persons.map(person => person.id !== personUpdated.id ? person : returnedPerson))
             setNewName('')
             setNewNumber('')
-            setNotificationMessage(`${returnedPerson.name} number is changed`)
+            setNotificationSuccessMessage(`${returnedPerson.name} number is changed`)
             setTimeout(() => {
-              setNotificationMessage(null)
+              setNotificationSuccessMessage(null)
+            }, 3000)
+          })
+          .catch(error => {
+            setPersons(persons.filter(person => person.id !== personUpdated.id))
+            setNotificationErrorMessage(`Information of ${personUpdated.name} has already been removed from server`)
+            setTimeout(() => {
+              setNotificationErrorMessage(null)
             }, 3000)
           })
       }
@@ -57,9 +65,9 @@ const App = () => {
         setPersons([ ...persons, returnedPerson ])
         setNewName('')
         setNewNumber('')
-        setNotificationMessage(`Added ${returnedPerson.name}`)
+        setNotificationSuccessMessage(`Added ${returnedPerson.name}`)
         setTimeout(() => {
-          setNotificationMessage(null)
+          setNotificationSuccessMessage(null)
         }, 3000)
       })
   }
@@ -88,9 +96,8 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      <Notification
-        message={notificationMessage}
-      />
+      <Notification message={notificationSuccessMessage} type='success' />
+      <Notification message={notificationErrorMessage} type='error' />
       <Filter
         filterName={filterName}
         handleChange={handleFilterChange}
