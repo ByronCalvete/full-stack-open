@@ -66,14 +66,28 @@ app.post('/api/persons', (request, response) => {
   const body = request.body
   console.log(body)
 
-  const person = {
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: 'name or number is missing'
+    })
+  }
+
+  const newPerson = {
     name: body.name,
     number: body.number,
     id: generateId()
   }
 
-  persons = [ ...persons, person ]
-  response.status(201).json(person)
+  const personAlreadyExist = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
+
+  if (personAlreadyExist) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
+  }
+
+  persons = [ ...persons, newPerson ]
+  response.status(201).json(newPerson)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
