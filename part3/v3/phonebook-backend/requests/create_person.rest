@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "VSCode de los mares",
+  "number": "44-55-66666666"
+}
