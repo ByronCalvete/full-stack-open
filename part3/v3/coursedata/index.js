@@ -4,6 +4,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('dist'))
 
 let notes = [
   {
@@ -81,7 +82,7 @@ app.post('/api/notes', (request, response) => {
   }
 
   notes = [ ...notes, note ]
-  response.json(note)
+  response.status(201).json(note)
 })
 
 app.delete('/api/notes/:id', (request, response) => {
