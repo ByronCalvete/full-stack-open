@@ -1,28 +1,31 @@
 const express = require('express')
 const cors = require('cors')
+
+const Note = require('./models/note')
+
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static('dist'))
 
-let notes = [
-  {
-    id: "1",
-    content: "HTML is easy",
-    important: true
-  },
-  {
-    id: "2",
-    content: "Browser can execute only JavaScript",
-    important: false
-  },
-  {
-    id: "3",
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true
-  }
-]
+// let notes = [
+//   {
+//     id: "1",
+//     content: "HTML is easy",
+//     important: true
+//   },
+//   {
+//     id: "2",
+//     content: "Browser can execute only JavaScript",
+//     important: false
+//   },
+//   {
+//     id: "3",
+//     content: "GET and POST are the most important methods of HTTP protocol",
+//     important: true
+//   }
+// ]
 
 const requestLogger = (request, response, next) => {
   if (request.path !== '/favicon.ico') {
@@ -41,32 +44,22 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-  response.json(notes)
+  Note.find({})
+    .then(notes => {
+      response.json(notes)
+    })
 })
 
 app.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
-  const note = notes.find(note => note.id === id)
 
-  if (note) {
-    response.json(note)
-  } else {
-    // response.status(404).send('Non-existing resource') -> Change of default error message
-    response.status(404).end()
-  }
+  Note.findById(id)
+    .then(note => {
+      response.json(note)
+    })
 })
 
-const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(note => Number(note.id)))
-    : 0
-
-  return String(maxId + 1)
-}
-
 app.post('/api/notes', (request, response) => {
-  // console.log(request.headers) -> headers of the request
-  // console.log(request.get('Content-Type')) -> find the header I need
   const body = request.body
 
   if (!body.content) {
@@ -75,14 +68,15 @@ app.post('/api/notes', (request, response) => {
     })
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
-    important: Boolean(body.important) || false,
-    id: generateId()
-  }
+    important: body.important || false
+  })
 
-  notes = [ ...notes, note ]
-  response.status(201).json(note)
+  note.save()
+    .then(savedNote => {
+      response.json(savedNote)
+    })
 })
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -100,7 +94,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

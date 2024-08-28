@@ -15,14 +15,14 @@ mongoose.connect(url)
 
 const noteSchema = new mongoose.Schema({
   content: String,
-  importante: Boolean
+  important: Boolean
 })
 
 const Note = mongoose.model('Note', noteSchema)
 
 // const note = new Note({
-//   content: 'MongoDB is a good database',
-//   importante: false
+//   content: 'Mongoose makes things easy',
+//   important: true
 // })
 
 // note.save()
@@ -31,7 +31,7 @@ const Note = mongoose.model('Note', noteSchema)
 //     mongoose.connection.close()
 //   })
 
-Note.find({ importante: false })
+Note.find({})
   .then(result => {
     result.forEach(note => {
       console.log(note)
