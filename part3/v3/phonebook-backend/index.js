@@ -42,34 +42,42 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello Phonebook</h1>')
 })
 
-app.get('/info', (request, response) => {
-  response.send(`
-    <div>
-      <p>Phonebook has info for ${persons.length} people</p>
-      <p>${new Date().toString()}</p>
-    </div>
-  `)
+app.get('/info', (request, response, next) => {
+  Person.find({})
+    .then(result => {
+      response.send(`
+        <div>
+          <p>Phonebook has info for ${result.length} people</p>
+          <p>${new Date().toString()}</p>
+        </div>
+      `)
+    })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(result => {
       response.json(result)
     })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  const person = persons.find(p => p.id === id)
 
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  Person.findById(id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
@@ -87,6 +95,7 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
       response.status(201).json(savedPerson)
     })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
