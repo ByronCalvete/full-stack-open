@@ -70,14 +70,6 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(person => Number(person.id)))
-    : 0
-  
-  return String(maxId + 1)
-}
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -87,22 +79,26 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const newPerson = {
+  const newPerson = new Person({
     name: body.name,
-    number: body.number,
-    id: generateId()
-  }
+    number: body.number
+  })
 
-  const personAlreadyExist = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
-
-  if (personAlreadyExist) {
-    return response.status(400).json({
-      error: 'name must be unique'
+  newPerson.save()
+    .then(savedPerson => {
+      response.status(201).json(savedPerson)
     })
-  }
 
-  persons = [ ...persons, newPerson ]
-  response.status(201).json(newPerson)
+  // const personAlreadyExist = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
+
+  // if (personAlreadyExist) {
+  //   return response.status(400).json({
+  //     error: 'name must be unique'
+  //   })
+  // }
+
+  // persons = [ ...persons, newPerson ]
+  // response.status(201).json(newPerson)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
