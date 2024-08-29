@@ -25,7 +25,7 @@ const personSchema = new mongoose.Schema({
       validator: function(v) {
         return /\d{2,3}-\d{6}/.test(v)
       },
-      message: props => `The numnber ${props.value} is invalid. The number must be of the form "22-345678234" or "223-45678234"`
+      message: props => `The number ${props.value} is invalid. The number must be of the form "22-345678234" or "223-45678234"`
     },
     required: true
   }
