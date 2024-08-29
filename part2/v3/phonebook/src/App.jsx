@@ -70,6 +70,14 @@ const App = () => {
           setNotificationSuccessMessage(null)
         }, 3000)
       })
+      .catch(error => {
+        setNotificationErrorMessage(error.response.data.error)
+        setNewName('')
+        setNewNumber('')
+        setTimeout(() => {
+          setNotificationErrorMessage(null)
+        }, 3000)
+      })
   }
 
   const handleNameChange = (e) => {
