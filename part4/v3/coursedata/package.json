@@ -9,7 +9,7 @@
     "build:ui": "rm -rf dist && cd ../../../part2/v3/coursedata && pnpm run build && cp -r dist ../../../part3/v3/coursedata",
     "deploy:full": "pnpm run build:ui && git add . && git commit -m uibuild && git push",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "Byron Calvete",
