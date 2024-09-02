@@ -57,7 +57,6 @@ describe('favorite blog', () => {
 
   test('of a empty list', () => {
     const result = listHelper.favoriteBlog([])
-
     assert.strictEqual(result, 'There is no blogs yet!')
   })
 

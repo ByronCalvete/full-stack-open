@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const dummy = (blogs) => {
   return 1
 }
@@ -29,8 +31,38 @@ const favoriteBlog = (blogs) => {
   return favorite
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) return 'No blogs published yet!'
+
+  const authors = blogs.map(blog => blog.author)
+
+  const authorsFrequency = {}
+  authors.forEach(author => authorsFrequency[author] = (authorsFrequency[author] || 0) + 1)
+  const maxNumber = Math.max(...Object.values(authorsFrequency))
+
+  for (const [key, value] of Object.entries(authorsFrequency)) {
+    if (value === maxNumber) {
+      return {
+        author: key,
+        blogs: value
+      }
+    }
+  }
+
+  const mostAuthor = {
+    author: authorsFrequency,
+    blogs: maxNumber
+  }
+
+  console.log(authorsFrequency)
+  console.log(mostAuthor)
+
+  return mostAuthor
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
