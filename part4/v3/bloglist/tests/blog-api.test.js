@@ -71,6 +71,57 @@ test('create a new blog post', async () => {
   assert.strictEqual(titles.includes('Blog added'), true)
 })
 
+test('verify default value of likes property', async () => {
+  const newBlog = {
+    title: 'Blog added',
+    author: 'Me',
+    url: 'www.me.com'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const newBlogs = response.body
+  const lastAddedBlog = newBlogs.filter(blog => blog.title === 'Blog added')
+  assert.strictEqual(lastAddedBlog[0].likes, 0)
+})
+
+test('verify missing title with status code 400', async () => {
+  const newBlog = {
+    author: 'Me',
+    url: 'www.me.com',
+    likes: 4
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+  
+  const response = await api.get('/api/blogs')
+  assert.strictEqual(response.body.length, initialBlogs.length)
+})
+
+test('verify missing url with status code 400', async () => {
+  const newBlog = {
+    title: 'Blog added',
+    author: 'Me',
+    likes: 4
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+  assert.strictEqual(response.body.length, initialBlogs.length)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
