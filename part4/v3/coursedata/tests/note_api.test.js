@@ -8,23 +8,17 @@ const api = supertest(app)
 
 const Note = require('../models/note')
 
-const initialNotes = [
-  {
-    content: 'HTML is easy',
-    importante: false
-  },
-  {
-    content: 'Browser can execute only JavaScript',
-    important: true
-  }
-]
-
 beforeEach(async () => {
   await Note.deleteMany({})
-  let noteObject = new Note(helper.initialNotes[0])
-  await noteObject.save()
-  noteObject = new Note(helper.initialNotes[1])
-  await noteObject.save()
+
+  // const noteObjects = helper.initialNotes.map(note => new Note(note))
+  // const promiseArray = noteObjects.map(note => note.save())
+  // await Promise.all(promiseArray)
+
+  for (let note of helper.initialNotes) {
+    let noteObject = new Note(note)
+    await noteObject.save()
+  }
 })
 
 test('notes are returned as json', async () => {
@@ -41,7 +35,7 @@ test('all notes are returned', async () => {
 
 test('there are two notes', async () => {
   const response = await api.get('/api/notes')
-  assert.strictEqual(response.body.length, initialNotes.length)
+  assert.strictEqual(response.body.length, helper.initialNotes.length)
 })
 
 test('a specific note is within the returned notes', async () => {
