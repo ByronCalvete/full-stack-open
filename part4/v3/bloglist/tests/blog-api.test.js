@@ -106,6 +106,20 @@ test('verify missing url with status code 400', async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
+test('succeeds with status code 200 if the blog is updated', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const updatedBlog = { ...blogsAtStart[0], likes: 10 }
+
+  await api
+    .put(`/api/blogs/${updatedBlog.id}`)
+    .send(updatedBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd[0].likes, updatedBlog.likes)
+})
+
 test('succeeds delete blog with status code 204', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
