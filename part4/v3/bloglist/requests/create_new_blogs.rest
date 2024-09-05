@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "My second blog from VSCode",
+  "title": "My third blog from VSCode",
   "author": "Rocky Calvete",
   "url": "www.rockycalvete.com",
-  "likes": 7
+  "likes": 9
 }

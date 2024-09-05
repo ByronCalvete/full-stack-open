@@ -2,30 +2,16 @@ const { test, after, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-const initialBlogs = [
-  {
-    title: 'My first blog for testing',
-    author: 'Rocky Calvete',
-    url: 'www.rockycalvete.com',
-    likes: 4
-  },
-  {
-    title: 'My second blog for testing',
-    author: 'Rocky Calvete',
-    url: 'www.rockycalvete.com',
-    likes: 7
-  }
-]
-
 beforeEach(async () => {
   await Blog.deleteMany({})
 
-  for (let blog of initialBlogs) {
+  for (let blog of helper.initialBlogs) {
     let blogObject = new Blog(blog)
     await blogObject.save()
   }
@@ -63,11 +49,10 @@ test('create a new blog post', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
   
-  const response = await api.get('/api/blogs')
-  const newBlogs = response.body
-  const titles = newBlogs.map(blog => blog.title)
+  const blogsAtEnd = await helper.blogsInDb()
+  const titles = blogsAtEnd.map(blog => blog.title)
 
-  assert.strictEqual(response.body.length, initialBlogs.length + 1)
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
   assert.strictEqual(titles.includes('Blog added'), true)
 })
 
@@ -84,9 +69,8 @@ test('verify default value of likes property', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs')
-  const newBlogs = response.body
-  const lastAddedBlog = newBlogs.filter(blog => blog.title === 'Blog added')
+  const blogsAtEnd = await helper.blogsInDb()
+  const lastAddedBlog = blogsAtEnd.filter(blog => blog.title === 'Blog added')
   assert.strictEqual(lastAddedBlog[0].likes, 0)
 })
 
@@ -102,8 +86,8 @@ test('verify missing title with status code 400', async () => {
     .send(newBlog)
     .expect(400)
   
-  const response = await api.get('/api/blogs')
-  assert.strictEqual(response.body.length, initialBlogs.length)
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
 test('verify missing url with status code 400', async () => {
@@ -118,8 +102,23 @@ test('verify missing url with status code 400', async () => {
     .send(newBlog)
     .expect(400)
 
-  const response = await api.get('/api/blogs')
-  assert.strictEqual(response.body.length, initialBlogs.length)
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
+test('succeeds delete blog with status code 204', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+  
+  const blogsAtEnd = await helper.blogsInDb()
+  const titles = blogsAtEnd.map(blog =>  blog.title)
+
+  assert.strictEqual(!titles.includes(blogToDelete.title), true)
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
 })
 
 after(async () => {
