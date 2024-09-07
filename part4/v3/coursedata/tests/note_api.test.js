@@ -77,9 +77,12 @@ describe('viewing a specific note', () => {
 
 describe('addition of a new note', () => {
   test('succeeds with valid data', async () => {
+    const users = await helper.usersInDb()
+
     const newNote = {
-      content: 'async/await simplifies makingk async calls',
-      important: true
+      content: 'async/await simplifies making async calls',
+      important: true,
+      userId: users[0].id
     }
 
     await api
@@ -92,12 +95,15 @@ describe('addition of a new note', () => {
     assert.strictEqual(notesAtEnd.length, helper.initialNotes.length + 1)
 
     const contents = notesAtEnd.map(note => note.content)
-    assert.strictEqual(contents.includes('async/await simplifies makingk async calls'), true)
+    assert.strictEqual(contents.includes('async/await simplifies making async calls'), true)
   })
 
   test('fails with status code 400 if data invalid', async () => {
+    const users = await helper.usersInDb()
+
     const newNote = {
-      important: true
+      important: true,
+      userId: users[0].id
     }
 
     await api
