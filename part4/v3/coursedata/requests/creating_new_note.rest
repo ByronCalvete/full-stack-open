@@ -1,8 +1,8 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvY2t5IiwiaWQiOiI2NmRjMmYyZTFjN2E2NTNiZjk3MTdlYjkiLCJpYXQiOjE3MjU4MjE4Mzd9.C29yBrbFvvfdDhtZvrIpmJ2HDVZQYtH9aMTQOXyhw-E
 
 {
-  "content": "Another note from the same author",
-  "important": false,
-  "userId": "66dc2f2e1c7a653bf9717eb9" 
+  "content": "Single page apps use token bases auth",
+  "important": false
 }

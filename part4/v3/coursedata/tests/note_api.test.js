@@ -77,17 +77,23 @@ describe('viewing a specific note', () => {
 
 describe('addition of a new note', () => {
   test('succeeds with valid data', async () => {
-    const users = await helper.usersInDb()
-
     const newNote = {
       content: 'async/await simplifies making async calls',
-      important: true,
-      userId: users[0].id
+      important: true
     }
+
+    const res = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const token = res._body.token
 
     await api
       .post('/api/notes')
       .send(newNote)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -99,16 +105,22 @@ describe('addition of a new note', () => {
   })
 
   test('fails with status code 400 if data invalid', async () => {
-    const users = await helper.usersInDb()
-
     const newNote = {
-      important: true,
-      userId: users[0].id
+      important: true
     }
+
+    const res = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const token = res._body.token
 
     await api
       .post('/api/notes')
       .send(newNote)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
 
     const notesAtEnd = await helper.notesInDb()
