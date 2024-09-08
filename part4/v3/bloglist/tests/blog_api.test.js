@@ -36,11 +36,14 @@ test('unique identifier property of blog posts is named id', async () => {
 })
 
 test('create a new blog post', async () => {
+  const users = await helper.usersInDb()
+
   const newBlog = {
     title: 'Blog added',
     author: 'Me',
     url: 'www.me.com',
-    likes: 4
+    likes: 4,
+    userId: users[0].id
   }
 
   await api
@@ -57,10 +60,13 @@ test('create a new blog post', async () => {
 })
 
 test('verify default value of likes property', async () => {
+  const users = await helper.usersInDb()
+
   const newBlog = {
     title: 'Blog added',
     author: 'Me',
-    url: 'www.me.com'
+    url: 'www.me.com',
+    userId: users[0].id
   }
 
   await api
@@ -75,10 +81,13 @@ test('verify default value of likes property', async () => {
 })
 
 test('verify missing title with status code 400', async () => {
+  const users = await helper.usersInDb()
+
   const newBlog = {
     author: 'Me',
     url: 'www.me.com',
-    likes: 4
+    likes: 4,
+    userId: users[0].id
   }
 
   await api
@@ -91,10 +100,13 @@ test('verify missing title with status code 400', async () => {
 })
 
 test('verify missing url with status code 400', async () => {
+  const users = await helper.usersInDb()
+
   const newBlog = {
     title: 'Blog added',
     author: 'Me',
-    likes: 4
+    likes: 4,
+    userId: users[0].id
   }
 
   await api
