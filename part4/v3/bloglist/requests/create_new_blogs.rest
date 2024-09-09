@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvY2t5IiwiaWQiOiI2NmRlMWMxNThlY2RmODM5NDMzYTE4MmMiLCJpYXQiOjE3MjU4NzI1Njl9.VjqH7jEJFyp5xYs2UTU7aLzvWuiOxBvP-D0DY7EbdIo
 
 {
-  "title": "My third blog from VSCode",
+  "title": "My fourth blog from VSCode",
   "author": "Rocky Calvete",
   "url": "www.rockycalvete.com",
-  "likes": 9,
-  "userId": "66de1c158ecdf839433a182c"
+  "likes": 9
 }
