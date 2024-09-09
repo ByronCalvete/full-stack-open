@@ -158,18 +158,41 @@ test('succeeds with status code 200 if the blog is updated', async () => {
 })
 
 test('succeeds delete blog with status code 204', async () => {
-  const blogsAtStart = await helper.blogsInDb()
-  const blogToDelete = blogsAtStart[0]
+  const newBlog = {
+    title: 'Blog added',
+    author: 'Me',
+    url: 'www.me.com',
+    likes: 4
+  }
+
+  const res = await api
+    .post('/api/login')
+    .send({ username: 'root', password: 'sekret' })
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  
+  const token = res._body.token
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  
+  const blogs = await helper.blogsInDb()
+  const blogToDelete = blogs[blogs.length-1]
 
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(204)
   
   const blogsAtEnd = await helper.blogsInDb()
   const titles = blogsAtEnd.map(blog =>  blog.title)
 
   assert.strictEqual(!titles.includes(blogToDelete.title), true)
-  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
 after(async () => {
