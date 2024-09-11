@@ -4,4 +4,5 @@
 - Login in frontend
 - props.children and protypes
 - Testing React apps
-- End to end testing
+- End to end testing: Playwright
+- End to end testing: Cypress
