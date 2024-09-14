@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJ5cm9uIiwiaWQiOiI2NmRlMWMyNDhlY2RmODM5NDMzYTE4MmUiLCJpYXQiOjE3MjU5MDI3NzF9.1e_0DKZTSPuzda0ht7n_oJrlta0ePWwJAm1cMe_pJ64
+
+{
+  "title": "My fifth blog from VSCode",
+  "author": "Byron Calvete",
+  "url": "www.byroncalvete.com",
+  "likes": 9
+}

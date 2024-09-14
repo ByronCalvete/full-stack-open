@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/66d4a3db4cdaaa4183c13ab9
+Content-Type: application/json
+
+{
+  "title": "My second blog from VSCode",
+  "author": "Rocky Calvete",
+  "url": "www.rockycalvete.com",
+  "likes": 10
+}
