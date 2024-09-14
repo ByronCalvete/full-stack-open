@@ -18,6 +18,14 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
   const handleLogin = async (e) => {
     e.preventDefault()
 
@@ -26,12 +34,19 @@ const App = () => {
         username, password
       })
 
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(loggedUser))
       setUser(loggedUser)
       setUsername('')
       setPassword('')
     } catch (exception) {
       console.log('Failed login')
     }
+  }
+
+  const handleLoginOut = (e) => {
+    e.preventDefault()
+    window.localStorage.removeItem('loggedBloglistUser')
+    setUser(null)
   }
 
   return (
@@ -47,6 +62,8 @@ const App = () => {
             />
           : <ListBlogs
               blogs={blogs}
+              userLogged={user}
+              handleClick={handleLoginOut}
             />
       }
     </>
