@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -15,6 +16,8 @@ const App = () => {
   const [ title, setTitle ] = useState('')
   const [ author, setAuthor ] = useState('')
   const [ url, setUrl ] = useState('')
+  const [ successMessage, setSuccessMessage ] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -45,7 +48,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log('Failed login')
+      setErrorMessage('Wrong username or password')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 3000)
     }
   }
 
@@ -70,6 +76,10 @@ const App = () => {
         setTitle('')
         setAuthor('')
         setUrl('')
+        setSuccessMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 3000)
       })
   }
 
@@ -77,15 +87,20 @@ const App = () => {
     <>
       {
         user === null
-          ? <LoginForm
-              username={username}
-              password={password}
-              handleSubmit={handleLogin}
-              handleChangeUsername={({ target }) => setUsername(target.value)}
-              handleChangePassword={({ target }) => setPassword(target.value)}
-            />
+          ? (<div>
+              <h2>log in to application</h2>
+              {errorMessage && <Notification message={errorMessage} type='error'/>}
+              <LoginForm
+                username={username}
+                password={password}
+                handleSubmit={handleLogin}
+                handleChangeUsername={({ target }) => setUsername(target.value)}
+                handleChangePassword={({ target }) => setPassword(target.value)}
+              />
+            </div>)
           : (<div>
               <h2>blogs</h2>
+              {successMessage && <Notification message={successMessage} type='success' />}
               <p>
                 {user.name} logged in
                 <button onClick={handleLoginOut}>logout</button>
