@@ -17,6 +17,7 @@ const App = () => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
   const [ user, setUser ] = useState(null)
+  const [ loginVisible, setLoginVisible ] = useState(false)
 
   useEffect(() => {
     noteService
@@ -103,6 +104,33 @@ const App = () => {
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important)
+  
+  const showLogin = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>
+            log in
+          </button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleSubmit={handleLogin}
+            onChangeUsername={({ target }) => setUsername(target.value)}
+            onChangePassword={({ target }) => setPassword(target.value)}
+          />
+          <button onClick={() => setLoginVisible(false)}>
+            cancel
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -110,13 +138,7 @@ const App = () => {
       <Notification message={errorMessage} />
       {
         user === null
-          ? <LoginForm
-              username={username}
-              password={password}
-              handleSubmit={handleLogin}
-              onChangeUsername={({ target }) => setUsername(target.value)}
-              onChangePassword={({ target }) => setPassword(target.value)}
-            />
+          ? showLogin()
           : (<div>
               <p>
                 {user.name} loggen-in
