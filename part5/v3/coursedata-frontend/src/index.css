@@ -3,6 +3,11 @@ h1 {
   font-style: italic;
 }
 
+h3 {
+  color: darkblue;
+  font-style: italic;
+}
+
 .note {
   color: gray;
   padding-top: 3px;
