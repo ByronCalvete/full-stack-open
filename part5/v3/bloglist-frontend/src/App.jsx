@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -63,6 +64,7 @@ const App = () => {
 
   const addBlog = (e) => {
     e.preventDefault()
+    blogFormRef.current.toggleVisibility()
     const newBlog = {
       title,
       author,
@@ -82,6 +84,8 @@ const App = () => {
         }, 3000)
       })
   }
+
+  const blogFormRef = useRef()
 
   return (
     <>
@@ -105,15 +109,17 @@ const App = () => {
                 {user.name} logged in
                 <button onClick={handleLoginOut}>logout</button>
               </p>
-              <BlogForm
-                title={title}
-                author={author}
-                url={url}
-                handleSubmit={addBlog}
-                onChangeTitle={({ target }) => setTitle(target.value)}
-                onChangeAuthor={({ target }) => setAuthor(target.value)}
-                onChangeUrl={({ target }) => setUrl(target.value)}
-              />
+              <Togglable buttonLabel='new note' ref={blogFormRef}>
+                <BlogForm
+                  title={title}
+                  author={author}
+                  url={url}
+                  handleSubmit={addBlog}
+                  onChangeTitle={({ target }) => setTitle(target.value)}
+                  onChangeAuthor={({ target }) => setAuthor(target.value)}
+                  onChangeUrl={({ target }) => setUrl(target.value)}
+                />
+              </Togglable>
               {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} />
               )}
