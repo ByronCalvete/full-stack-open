@@ -10,18 +10,22 @@ const Blog = ({ blog }) => {
       {
         showDetails
           ? (<>
-              <span>{blog.title}</span>
-              <button onClick={handleClick}>view</button>
+              <p className='blog-detail'>
+                {blog.title}
+                <button onClick={handleClick}>view</button>
+              </p>
             </>)
           : (<>
-              <span>{blog.title} {blog.author}</span>
-              <button onClick={handleClick}>hide</button>
-              <br/>
-              <span>{blog.url}</span>
-              <br/>
-              <span>likes {blog.likes} <button>like</button></span>
-              <br/>
-              <span>{blog.author}</span>
+              <p className='blog-detail'>
+                {blog.title}
+                <button onClick={handleClick}>hide</button>
+              </p>
+              <p className='blog-detail'>{blog.url}</p>
+              <p className='blog-detail'>
+                likes {blog.likes}
+                <button>like</button>
+              </p>
+              <p className='blog-detail'>{blog.author}</p>
             </>)
       }
     </div>
