@@ -15,3 +15,9 @@
   border-radius: 5px;
   font-size: 20px;
 }
+
+.blog {
+  padding: 10px 5px;
+  border: 1px solid black;
+  margin: 5px 0;
+}
