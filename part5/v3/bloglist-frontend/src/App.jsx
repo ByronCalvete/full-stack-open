@@ -74,6 +74,23 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const updateLikes = (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+
+    blogService
+      .update(id, updatedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
+      })
+      .catch(error => {
+        setErrorMessage('Error. Likes not updated')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 3000)
+      })
+  }
+
   return (
     <>
       {
@@ -100,7 +117,11 @@ const App = () => {
                 <BlogForm createBlog={addBlog} />
               </Togglable>
               {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  handleLikesClick={updateLikes}
+                />
               )}
             </div>)
       }
