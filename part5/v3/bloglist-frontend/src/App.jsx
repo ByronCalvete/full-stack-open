@@ -91,6 +91,15 @@ const App = () => {
       })
   }
 
+  const handleDelete = (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    if (confirm(`Remove blog ${blog.title}?`)) {
+      blogService
+        .deleteBlog(id) // This promise do not return data
+        setBlogs(blogs.filter(blog => blog.id !== id))
+    }
+  }
+
   return (
     <>
       {
@@ -122,7 +131,9 @@ const App = () => {
                   <Blog
                     key={blog.id}
                     blog={blog}
+                    user={user}
                     handleLikesClick={updateLikes}
+                    handleDeleteClick={handleDelete}
                   />
               )}
             </div>)
