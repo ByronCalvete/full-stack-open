@@ -40,8 +40,8 @@ const App = () => {
 
   const handleLoggedOut = (e) => {
     e.preventDefault()
-     window.localStorage.removeItem('loggedNoteappUser')
-     setUser(null)
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
   }
 
   const addNote = (noteObject) => {
@@ -84,20 +84,20 @@ const App = () => {
       {
         user === null
           ? <Togglable buttonLabel='login'>
-              <LoginForm
-                logUser={handleLogin}
-                errorMessage={setErrorMessage}
-              />
-            </Togglable>
+            <LoginForm
+              logUser={handleLogin}
+              errorMessage={setErrorMessage}
+            />
+          </Togglable>
           : (<div>
-              <p>
-                {user.name} loggen-in
-                <button onClick={handleLoggedOut}>Logout</button>
-              </p>
-              <Togglable buttonLabel='new note' ref={noteFormRef}>
-                <NoteForm createNote={addNote} />
-              </Togglable>
-            </div>)
+            <p>
+              {user.name} loggen-in
+              <button onClick={handleLoggedOut}>Logout</button>
+            </p>
+            <Togglable buttonLabel='new note' ref={noteFormRef}>
+              <NoteForm createNote={addNote} />
+            </Togglable>
+          </div>)
       }
       <div>
         <button onClick={() => setShowAll(!showAll)}>
@@ -105,7 +105,7 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note => 
+        {notesToShow.map(note =>
           <Note
             key={note.id}
             note={note}

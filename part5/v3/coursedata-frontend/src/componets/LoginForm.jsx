@@ -19,8 +19,8 @@ const LoginForm = ({ logUser, errorMessage }) => {
           errorMessage(null)
         }, 3000)
       })
-      setUsername('')
-      setPassword('')
+    setUsername('')
+    setPassword('')
   }
 
   return (
