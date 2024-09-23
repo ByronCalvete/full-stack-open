@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const App = () => {
     if (confirm(`Remove blog ${blog.title}?`)) {
       blogService
         .deleteBlog(id) // This promise do not return data
-        setBlogs(blogs.filter(blog => blog.id !== id))
+      setBlogs(blogs.filter(blog => blog.id !== id))
     }
   }
 
@@ -105,38 +105,38 @@ const App = () => {
       {
         user === null
           ? (<div>
-              <h2>log in to application</h2>
-              {errorMessage && <Notification message={errorMessage} type='error'/>}
-              <LoginForm
-                username={username}
-                password={password}
-                handleSubmit={handleLogin}
-                handleChangeUsername={({ target }) => setUsername(target.value)}
-                handleChangePassword={({ target }) => setPassword(target.value)}
-              />
-            </div>)
+            <h2>log in to application</h2>
+            {errorMessage && <Notification message={errorMessage} type='error'/>}
+            <LoginForm
+              username={username}
+              password={password}
+              handleSubmit={handleLogin}
+              handleChangeUsername={({ target }) => setUsername(target.value)}
+              handleChangePassword={({ target }) => setPassword(target.value)}
+            />
+          </div>)
           : (<div>
-              <h2>blogs</h2>
-              {successMessage && <Notification message={successMessage} type='success' />}
-              <p>
-                {user.name} logged in
-                <button onClick={handleLoginOut}>logout</button>
-              </p>
-              <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-                <BlogForm createBlog={addBlog} />
-              </Togglable>
-              {blogs
-                .sort((a,b) => a.likes - b.likes)
-                .map(blog =>
-                  <Blog
-                    key={blog.id}
-                    blog={blog}
-                    user={user}
-                    handleLikesClick={updateLikes}
-                    handleDeleteClick={handleDelete}
-                  />
+            <h2>blogs</h2>
+            {successMessage && <Notification message={successMessage} type='success' />}
+            <p>
+              {user.name} logged in
+              <button onClick={handleLoginOut}>logout</button>
+            </p>
+            <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+              <BlogForm createBlog={addBlog} />
+            </Togglable>
+            {blogs
+              .sort((a,b) => a.likes - b.likes)
+              .map(blog =>
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  user={user}
+                  handleLikesClick={updateLikes}
+                  handleDeleteClick={handleDelete}
+                />
               )}
-            </div>)
+          </div>)
       }
     </>
   )
