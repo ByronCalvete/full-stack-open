@@ -8,6 +8,9 @@ blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     .find({})
     .populate('user', { username: 1, name: 1 })
+
+  // blogs.sort((a,b) => a.likes - b.likes) // -> sort blogs from backend or frontend?
+
   response.json(blogs)
 })
 
