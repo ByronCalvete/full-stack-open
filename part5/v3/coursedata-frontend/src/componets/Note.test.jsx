@@ -10,8 +10,20 @@ test('renders content', () => {
 
   render(<Note note={note} />)
 
-  const element = screen.getByText('Component testing is done with react-testing-library')
+  const element = screen.getByText('Component testing is done with react-testing-library', { exact: false })
   expect(element).toBeDefined()
+})
+
+test('does not render this', () => {
+  const note = {
+    content: 'This is a reminder',
+    important: false
+  }
+
+  render(<Note note={note} />)
+
+  const element = screen.queryByText('do not want this thing to be rendered')
+  expect(element).toBeNull()
 })
 
 test('clicking the button calls event handler once', async () => {
