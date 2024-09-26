@@ -10,22 +10,22 @@ const Blog = ({ blog, handleLikesClick, user, handleDeleteClick }) => {
       {
         showDetails
           ? (<>
-            <p className='blog-detail'>
-              {blog.title}
+            <p className='blog-detail title-author'>
+              {blog.title} {blog.author}
               <button onClick={handleClick}>view</button>
             </p>
           </>)
           : (<>
-            <p className='blog-detail'>
-              {blog.title}
+            <p className='blog-detail title-author'>
+              {blog.title} {blog.author}
               <button onClick={handleClick}>hide</button>
             </p>
-            <p className='blog-detail'>{blog.url}</p>
-            <p className='blog-detail'>
+            <p className='blog-detail url'>{blog.url}</p>
+            <p className='blog-detail likes'>
                 likes {blog.likes}
               <button onClick={() => handleLikesClick(blog.id)}>like</button>
             </p>
-            <p className='blog-detail'>{blog.author}</p>
+            <p className='blog-detail user'>{blog.user.name}</p>
             {user.username === blog.user.username && <button onClick={() => handleDeleteClick(blog.id)}>remove</button>}
           </>)
       }
