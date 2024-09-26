@@ -58,3 +58,36 @@ test('check url and likes when click the view button', async () => {
   expect(url).toHaveTextContent(`${blog.url}`)
   expect(likes).toHaveTextContent(`likes ${blog.likes}`)
 })
+
+test('clicked like button twice', async () => {
+  const blog = {
+    title: 'I am a title',
+    author: 'I am an author',
+    url: 'I am an url',
+    likes: 2,
+    user: {
+      username: 'username',
+      name: 'name',
+      id: '2263jhgfjk234jhg'
+    }
+  }
+  const user = {
+    name: 'The name',
+    username: 'The username',
+    toke: 'thetoken'
+  }
+
+  const mockHandler = vi.fn()
+
+  render(<Blog blog={blog} user={user} handleLikesClick={mockHandler} />)
+
+  const userClick = userEvent.setup()
+  const buttonView = screen.getByText('view')
+  await userClick.click(buttonView)
+
+  const buttonLike = screen.getByText('like')
+  await userClick.click(buttonLike)
+  await userClick.click(buttonLike)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
