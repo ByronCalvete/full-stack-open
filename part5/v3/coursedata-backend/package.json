@@ -9,7 +9,8 @@
     "test": "NODE_ENV=test node --env-file=config.env --test",
     "build:ui": "rm -rf dist && cd ../coursedata-frontend && pnpm run build && cp -r dist ../coursedata-backend",
     "deploy:full": "pnpm run build:ui && git add . && git commit -m uibuild && git push",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start:test": "NODE_ENV=test node --env-file=config.env index.js"
   },
   "keywords": [],
   "author": "Byron Calvete",
