@@ -21,17 +21,31 @@ describe('Note app', () => {
   })
 
   test('user can login', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
+    await page.getByRole('button', { name: 'log in' }).click()
     await page.getByTestId('username').fill('root')
     await page.getByTestId('password').fill('sekret')
     await page.getByRole('button', { name: 'login' }).click()
 
-    await expect(page.getByText('root loggen-in')).toBeVisible()
+    await expect(page.getByText('root logged-in')).toBeVisible()
+  })
+
+  test('login fails with wrong password', async ({ page }) => {
+    await page.getByRole('button', { name: 'log in' }).click()
+    await page.getByTestId('username').fill('root')
+    await page.getByTestId('password').fill('wrong')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    const errorDiv = await page.locator('.error')
+    await expect(errorDiv).toContainText('Wrong Credentials')
+    await expect(errorDiv).toHaveCSS('border-style', 'solid')
+    await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
+    
+    await expect(page.getByText('root logged-in')).not.toBeVisible()
   })
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole('button', { name: 'login' }).click()
+      await page.getByRole('button', { name: 'log in' }).click()
 
       await page.getByTestId('username').fill('root')
       await page.getByTestId('password').fill('sekret')

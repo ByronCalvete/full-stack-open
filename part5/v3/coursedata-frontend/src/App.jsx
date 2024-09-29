@@ -83,7 +83,7 @@ const App = () => {
       <Notification message={errorMessage} />
       {
         user === null
-          ? <Togglable buttonLabel='login'>
+          ? <Togglable buttonLabel='log in'>
             <LoginForm
               logUser={handleLogin}
               errorMessage={setErrorMessage}
@@ -91,7 +91,7 @@ const App = () => {
           </Togglable>
           : (<div>
             <p>
-              {user.name} loggen-in
+              {user.name} logged-in
               <button onClick={handleLoggedOut}>Logout</button>
             </p>
             <Togglable buttonLabel='new note' ref={noteFormRef}>
