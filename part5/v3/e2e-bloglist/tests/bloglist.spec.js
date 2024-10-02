@@ -38,8 +38,26 @@ describe('Blog app', () => {
       const errorDiv = await page.locator('.error')
       await expect(errorDiv).toContainText('Wrong username or password')
       await expect(errorDiv).toHaveCSS('border-style', 'solid')
-      
+
       await expect(page.getByText('Root logged in')).not.toBeVisible()
+    })
+
+    describe('when logged in', () => {
+      beforeEach(async ({ page }) => {
+        await page.getByTestId('username').fill('root')
+        await page.getByTestId('password').fill('sekret')
+        await page.getByRole('button', { name: 'login' }).click()
+      })
+
+      test('a new blog can be created', async ({ page }) => {
+        await page.getByRole('button', { name: 'create new blog' }).click()
+        await page.getByTestId('title').fill('The best blog of the history')
+        await page.getByTestId('author').fill('Rocky El Loco')
+        await page.getByTestId('url').fill('www.rocky.com')
+        await page.getByRole('button', { name: 'create' }).click()
+
+        await expect(page.locator('.blog').getByText('The best blog of the history', { exact: false })).toBeVisible()
+      })
     })
   })
 })
