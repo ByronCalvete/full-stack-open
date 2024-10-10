@@ -51,21 +51,21 @@ describe('Note App', function() {
       cy.contains('a note created by cypress')
     })
 
-    describe('and a note exits', function() {
+    describe('and several notes exits', function() {
       beforeEach(function() {
-        cy.createNote({
-          content: 'another note cypress',
-          important: true
-        })
+        cy.createNote({ content: 'first note', important: false })
+        cy.createNote({ content: 'second note', important: false })
+        cy.createNote({ content: 'third note', important: false })
       })
 
-      it('it can be made not important', function() {
-        cy.contains('another note cypress')
-          .contains('make not important')
-          .click()
-        
-        cy.contains('another note cypress')
-          .contains('make important')
+      it('one of those can be important', function() {
+        // cy.contains('second note').parent().find('button').click()
+        // cy.contains('second note').parent().find('button')
+        //   .should('contain', 'make not important')
+
+        cy.contains('second note').parent().find('button').as('theButton')
+        cy.get('@theButton').click()
+        cy.get('@theButton').should('contain', 'make not important')
       })
     })
   })
