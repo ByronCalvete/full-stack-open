@@ -42,9 +42,7 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.get('#username').type('root')
-      cy.get('#password').type('sekret')
-      cy.get('#login-button').click()
+      cy.login({ username: 'root', password: 'sekret' })
     })
 
     it('A blog can be created', function() {
@@ -60,6 +58,23 @@ describe('Blog app', function() {
         .and('have.css', 'border-style', 'solid')
       
       cy.contains('My first blog from Cypress Rocky Calvete')
+    })
+
+    describe('a several blogs exists', function() {
+      beforeEach(function() {
+        cy.createBlog({ title: 'Blog 2', author: 'Author 2', url: 'www.2.com' })
+        cy.createBlog({ title: 'Blog 3', author: 'Author 3', url: 'www.3.com' })
+        cy.createBlog({ title: 'Blog 4', author: 'Author 4', url: 'www.4.com' })
+      })
+
+      it('a use can like a blog', function() {
+        cy.contains('Blog 2')
+          .contains('view')
+          .click()
+        cy.contains('like').click()
+
+        cy.contains('likes 1')
+      })
     })
   })
 })
