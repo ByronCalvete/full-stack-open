@@ -1,6 +1,6 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
     const user1 = {
       name: 'Root',
       username: 'root',
@@ -11,10 +11,10 @@ describe('Blog app', function() {
       username: 'admin',
       password: 'admin'
     }
-    cy.request('POST', 'http://localhost:3003/api/users', user1)
-    cy.request('POST', 'http://localhost:3003/api/users', user2)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user1)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user2)
 
-    cy.visit('http://localhost:5173')
+    cy.visit('')
   })
 
   it('Login form is shown', function() {
@@ -96,7 +96,7 @@ describe('Blog app', function() {
           cy.get('html').should('not.contain', 'Blog 5')
         })
 
-        it.only('only creator can see the delete button', function() {
+        it('only creator can see the delete button', function() {
           cy.contains('Blog 4')
             .contains('view')
             .click()
@@ -104,7 +104,7 @@ describe('Blog app', function() {
           cy.contains('remove')
         })
 
-        it.only('a different creator not see the delete button', function () {
+        it('a different creator not see the delete button', function () {
           cy.contains('logout').click()
           cy.login({ username: 'admin', password: 'admin' })
 
@@ -113,6 +113,32 @@ describe('Blog app', function() {
             .click()
 
           cy.should('not.contain', 'remove')
+        })
+      })
+
+      describe('ordered blogs', function() {
+        it('by likes from highest to lowest', function() {
+          cy.contains('Blog 2')
+            .contains('view')
+            .click()
+          cy.contains('like').click()
+          cy.contains('hide').click()
+
+          cy.contains('Blog 3')
+            .contains('view')
+            .click()
+          cy.contains('like').click()
+          cy.contains('hide').click()
+
+          cy.contains('Blog 3')
+            .contains('view')
+            .click()
+          cy.contains('like').click()
+          cy.contains('hide').click()
+
+          cy.get('.blog').eq(0).should('contain', 'Blog 3')
+          cy.get('.blog').eq(1).should('contain', 'Blog 2')
+          cy.get('.blog').eq(2).should('contain', 'Blog 4')
         })
       })
     })
