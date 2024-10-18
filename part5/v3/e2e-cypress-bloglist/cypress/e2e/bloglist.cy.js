@@ -82,17 +82,38 @@ describe('Blog app', function() {
         cy.contains('likes 1')
       })
 
-      it('login with admin and the user who created a blog can delete it', function() {
-        cy.contains('logout').click()
-        cy.login({ username: 'admin', password: 'admin' })
-        cy.createBlog({ title: 'Blog 5', author: 'Author 5', url: 'www.5.com'  })
+      describe('delete blogs', function() {
+        it('login with admin and the user who created a blog can delete it', function() {
+          cy.contains('logout').click()
+          cy.login({ username: 'admin', password: 'admin' })
+          cy.createBlog({ title: 'Blog 5', author: 'Author 5', url: 'www.5.com'  })
+  
+          cy.contains('Blog 5')
+            .contains('view')
+            .click()
+          cy.contains('remove').click()
+  
+          cy.get('html').should('not.contain', 'Blog 5')
+        })
 
-        cy.contains('Blog 5')
-          .contains('view')
-          .click()
-        cy.contains('remove').click()
+        it.only('only creator can see the delete button', function() {
+          cy.contains('Blog 4')
+            .contains('view')
+            .click()
 
-        cy.get('html').should('not.contain', 'Blog 5')
+          cy.contains('remove')
+        })
+
+        it.only('a different creator not see the delete button', function () {
+          cy.contains('logout').click()
+          cy.login({ username: 'admin', password: 'admin' })
+
+          cy.contains('Blog 4')
+            .contains('view')
+            .click()
+
+          cy.should('not.contain', 'remove')
+        })
       })
     })
   })
