@@ -1,29 +1,17 @@
 import { createRoot } from 'react-dom/client'
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-
 import App from './App'
+
 import noteReducer from './reducers/noteReducer'
+import filterReducer from './reducers/filterReducer'
 
-const store = createStore(noteReducer)
-
-store.dispatch({
-  type: 'NEW_NOTE',
-  payload: {
-    content: 'the app state is in redux store',
-    important: true,
-    id: 1
-  }
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer
 })
 
-store.dispatch({
-  type: 'NEW_NOTE',
-  payload: {
-    content: 'state changes are made with actions',
-    important: false,
-    id: 2
-  }
-})
+const store = createStore(reducer)
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
