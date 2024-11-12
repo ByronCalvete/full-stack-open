@@ -6,7 +6,7 @@ describe('filterReducer', () => {
   test('returns new state with action SET_FILTER', () => {
     const state = 'ALL'
     const action = {
-      type: 'SET_FILTER',
+      type: 'filter/filterChange',
       payload: 'WHATEVER'
     }
 
