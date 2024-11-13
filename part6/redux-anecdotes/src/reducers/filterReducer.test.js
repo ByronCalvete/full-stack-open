@@ -3,7 +3,7 @@ import filterReducer from './filterReducer'
 import deepFreeze from 'deep-freeze'
 
 describe('filterReducer', () => {
-  test.only('return a new state with the action filter/filterChange', () => {
+  test('return a new state with the action filter/filterChange', () => {
     const state = ''
     const action = {
       type: 'filter/filterChange',
