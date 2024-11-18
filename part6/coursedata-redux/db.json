@@ -2,22 +2,22 @@
   "notes": [
     {
       "content": "the app state is in redux store",
-      "important": false,
+      "important": true,
       "id": "1"
     },
     {
       "content": "state changes are made with actions",
-      "important": true,
+      "important": false,
       "id": "2"
     },
     {
-      "id": "db14",
-      "content": "Hola amigos",
+      "id": "8667",
+      "content": "test note",
       "important": true
     },
     {
-      "id": "074f",
-      "content": "hola amigos",
+      "id": "5ff2",
+      "content": "New repro Note",
       "important": false
     }
   ]
