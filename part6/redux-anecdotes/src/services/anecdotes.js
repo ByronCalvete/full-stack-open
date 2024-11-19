@@ -21,7 +21,21 @@ const createNew = (content) => {
   return request
 }
 
+const vote = (id, newAnecdote) => {
+  const request = fetch(`${baseUrl}/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(newAnecdote),
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8'
+    }
+  })
+    .then(response => response.json())
+    .then(json => json)
+  return request
+}
+
 export default {
   getAll,
-  createNew
+  createNew,
+  vote
 }
