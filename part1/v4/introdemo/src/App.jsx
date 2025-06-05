@@ -1,23 +1,24 @@
-import { useState } from 'react'
+import { useState  } from 'react'
 
-const Display = ({ counter }) => <div>{counter}</div>
+const Button = ({ text, onClick }) => <button onClick={onClick}>{text}</button>
 
-const Button = ({ title, onClick }) => <button onClick={onClick}>{title}</button>
+const Display = ({ value }) => <div>{value}</div>
 
 const App = () => {
-  const [ counter, setCounter ] = useState(0)
+  const [ value, setValue ] = useState(10)
 
-  const increaseByOne = () => setCounter(counter + 1)
-  const setToZero = () => setCounter(0)
-  const decrementByOne = () => setCounter(counter - 1)
+  const setToValue = (newValue) => {
+    console.log('new value', newValue)
+    setValue(newValue)
+  }
 
   return (
-    <>
-      <Display counter={counter}/>
-      <Button onClick={increaseByOne} title='plus' />
-      <Button onClick={setToZero} title='zero' />
-      <Button onClick={decrementByOne} title='minus' />
-    </>
+    <div>
+      <Display value={value}/>
+      <Button text='thousand' onClick={() => setToValue(1000)}/>
+      <Button text='reset' onClick={() => setToValue(0)}/>
+      <Button text='increment' onClick={() => setToValue(value + 1)}/>
+    </div>
   )
 }
 
