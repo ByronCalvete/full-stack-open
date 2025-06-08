@@ -8,6 +8,13 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault()
+    const alreadyExits = persons.some(person => person.name === newName)
+
+    if (alreadyExits) {
+      setNewName('')
+      return alert(`${newName} is already added to phonebook`)
+    }
+
     const nameObject = {
       name: newName
     }
