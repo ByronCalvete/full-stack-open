@@ -12,6 +12,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filteredPeople, setFilteredPeople ] = useState('')
   const [ successMessage, setSuccessMessage ] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   useEffect(() => {
     personService
@@ -43,6 +44,15 @@ const App = () => {
           setSuccessMessage(`The number of ${returnedPerson.name} was changed`)
           setTimeout(() => {
             setSuccessMessage(null)
+          }, 3000)
+        })
+        .catch(error => {
+          setErrorMessage(`Information of ${alreadyExist.name} has already been removed from the server`)
+          setNewName('')
+          setNewNumber('')
+          setPersons(persons.filter(person => person.name !== alreadyExist.name))
+          setTimeout(() => {
+            setErrorMessage(null)
           }, 3000)
         })
 
@@ -99,6 +109,7 @@ const App = () => {
     <>
       <h2>Phonebook</h2>
       {successMessage && <Notification message={successMessage} styleType='success' />}
+      {errorMessage && <Notification message={errorMessage} styleType='error' />}
       <SearchFilter
         filteredPeople={filteredPeople}
         handleChangeFiltered={handleChangeFiltered}
