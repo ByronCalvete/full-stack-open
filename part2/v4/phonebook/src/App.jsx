@@ -21,12 +21,26 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault()
-    const alreadyExits = persons.some(person => person.name === newName)
+    const alreadyExist = persons.find(person => person.name === newName)
 
-    if (alreadyExits) {
-      setNewName('')
-      setNewNumber('')
-      return alert(`${newName} is already added to phonebook`)
+    if (alreadyExist) {
+      if (!confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+        setNewName('')
+        setNewNumber('')
+        return null
+      }
+
+      const changedPerson = { ...alreadyExist, number: newNumber }
+
+      personService
+        .update(alreadyExist.id, changedPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.name === alreadyExist.name ? returnedPerson : person))
+          setNewName('')
+          setNewNumber('')
+        })
+
+      return null
     }
 
     const nameObject = {
@@ -46,7 +60,7 @@ const App = () => {
   const deletePerson = (person) => {
     const id = person.id
   
-    if (!confirm(`Delete ${person.name} ?`)) return
+    if (!confirm(`Delete ${person.name} ?`)) return null
 
     personService
       .deletePerson(id)
