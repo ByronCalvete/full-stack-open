@@ -31,8 +31,7 @@ const App = () => {
 
     const nameObject = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
 
     personService
@@ -41,6 +40,18 @@ const App = () => {
         setPersons([ ...persons, returnedPerson ])
         setNewName('')
         setNewNumber('')
+      })
+  }
+
+  const deletePerson = (person) => {
+    const id = person.id
+  
+    if (!confirm(`Delete ${person.name} ?`)) return
+
+    personService
+      .deletePerson(id)
+      .then(deletedPerson => {
+        setPersons(persons.filter(person => person.id !== id))
       })
   }
 
@@ -76,7 +87,10 @@ const App = () => {
         handleChangeNumber={handleChangeNumber}
       />
       <h3>Numbers</h3>
-      <Persons personFiltered={personFiltered}/>
+      <Persons
+        personFiltered={personFiltered}
+        deletePerson={deletePerson}
+      />
     </>
   )
 }

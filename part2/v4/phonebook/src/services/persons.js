@@ -12,18 +12,23 @@ const getAll = () => {
 }
 
 const create = (newPerson) => {
-  // const request = axios.post(baseUrl, newPerson)
-  // return request.then(response => response.data)
+  const request = axios.post(baseUrl, newPerson)
+  return request.then(response => response.data)
 
-  const request = fetch(baseUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newPerson)
-  })
-    .then(response => response.json())
-  return request.then(json => json)
+  // const request = fetch(baseUrl, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(newPerson)
+  // })
+  //   .then(response => response.json())
+  // return request.then(json => json)
 }
 
-export default { getAll, create }
+const deletePerson = (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`)
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, deletePerson }
