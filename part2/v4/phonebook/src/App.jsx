@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import SearchFilter from './components/SearchFilter'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filteredPeople, setFilteredPeople ] = useState('')
+  const [ successMessage, setSuccessMessage ] = useState(null)
 
   useEffect(() => {
     personService
@@ -38,6 +40,10 @@ const App = () => {
           setPersons(persons.map(person => person.name === alreadyExist.name ? returnedPerson : person))
           setNewName('')
           setNewNumber('')
+          setSuccessMessage(`The number of ${returnedPerson.name} was changed`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 3000)
         })
 
       return null
@@ -54,6 +60,10 @@ const App = () => {
         setPersons([ ...persons, returnedPerson ])
         setNewName('')
         setNewNumber('')
+        setSuccessMessage(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 3000)
       })
   }
 
@@ -88,6 +98,7 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
+      {successMessage && <Notification message={successMessage} styleType='success' />}
       <SearchFilter
         filteredPeople={filteredPeople}
         handleChangeFiltered={handleChangeFiltered}
