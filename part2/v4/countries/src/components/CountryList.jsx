@@ -6,7 +6,6 @@ const CountryList = ({ countries }) => {
   const [ listCountries, setListCountries ] = useState(countries)
 
   const handleClick = (country) => {
-    console.log(country)
     setListCountries(country)
   }
 
