@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import CountryDetail from './components/CountryDetail'
+import CountryList from './components/CountryList'
 
 const App = () => {
   const [ countries, setCountries ] = useState(null)
@@ -34,9 +35,7 @@ const App = () => {
       {countriesToShow.length >= 10
         ? <p>Too many matches, specify another filter</p>
         : countriesToShow.length > 1
-          ? countriesToShow.map(country => (
-              <p key={country.name.official}>{country.name.common}</p>
-            ))
+          ? <CountryList countries={countriesToShow} />
           : <CountryDetail country={countriesToShow[0]} />
       }
     </div>
