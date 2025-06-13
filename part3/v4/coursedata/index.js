@@ -77,7 +77,7 @@ app.post('/api/notes', (request, response) => {
   }
 
   notes = [ ...notes, note ]
-  response.json(note)
+  response.status(201).json(note)
 })
 
 app.delete('/api/notes/:id', (request, response) => {
