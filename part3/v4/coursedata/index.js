@@ -1,30 +1,9 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const app = express()
+const Note = require('./models/note')
 
 app.use(express.json())
 app.use(express.static('dist'))
-
-const password = process.argv[2]
-const url = `mongodb+srv://fullstack-v4:${password}@project-v4.20ph1kb.mongodb.net/noteApp?retryWrites=true&w=majority&appName=project-v4`
-
-mongoose.set('strictQuery', false)
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean
-})
-
-noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Note = mongoose.model('Note', noteSchema)
 
 let notes = [
   {
@@ -67,13 +46,11 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
-  const note = notes.find(note => note.id === id)
-
-  if (note) {
-    response.json(note)
-  } else {
-    response.status(404).end()
-  }
+  
+  Note.findById(id)
+    .then(note => {
+      response.json(note)
+    })
 })
 
 const generateId = () => {
@@ -93,14 +70,15 @@ app.post('/api/notes', (request, response) => {
     })
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
-    important: body.important || false,
-    id: generateId()
-  }
+    important: body.important || false
+  })
 
-  notes = [ ...notes, note ]
-  response.status(201).json(note)
+  note.save()
+    .then(savedNote => {
+      response.status(201).json(savedNote)
+    })
 })
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -116,7 +94,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
