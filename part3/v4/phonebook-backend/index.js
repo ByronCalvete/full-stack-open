@@ -90,14 +90,15 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const newPerson = {
+  const newPerson = new Person({
     name: body.name,
-    number: body.number,
-    id: generateId()
-  }
+    number: body.number
+  })
 
-  persons = [ ...persons, newPerson ]
-  response.status(201).json(newPerson)
+  newPerson.save()
+    .then(savedPerson => {
+      response.status(201).json(savedPerson)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
