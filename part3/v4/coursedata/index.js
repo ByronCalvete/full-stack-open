@@ -1,28 +1,9 @@
 const express = require('express')
 const app = express()
 const Note = require('./models/note')
-const note = require('./models/note')
 
 app.use(express.static('dist'))
 app.use(express.json())
-
-let notes = [
-  {
-    id: "1",
-    content: "HTML is easy",
-    important: true
-  },
-  {
-    id: "2",
-    content: "Browser can execute only JavaScript",
-    important: false
-  },
-  {
-    id: "3",
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true
-  }
-]
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -47,7 +28,7 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (request, response, next) => {
   const id = request.params.id
-  
+
   Note.findById(id)
     .then(note => {
       if (note) {
@@ -92,7 +73,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 
       note.content = content
       note.important = important
-    
+
       return note.save()
         .then(updatedNote => {
           response.json(updatedNote)
