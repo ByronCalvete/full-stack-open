@@ -47,10 +47,9 @@ const App = () => {
           }, 3000)
         })
         .catch(error => {
-          setErrorMessage(`Information of ${alreadyExist.name} has already been removed from the server`)
+          setErrorMessage(error.response.data.error)
           setNewName('')
           setNewNumber('')
-          setPersons(persons.filter(person => person.name !== alreadyExist.name))
           setTimeout(() => {
             setErrorMessage(null)
           }, 3000)
@@ -73,6 +72,14 @@ const App = () => {
         setSuccessMessage(`Added ${returnedPerson.name}`)
         setTimeout(() => {
           setSuccessMessage(null)
+        }, 3000)
+      })
+      .catch(error => {
+        setNewName('')
+        setNewNumber('')
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
         }, 3000)
       })
   }
