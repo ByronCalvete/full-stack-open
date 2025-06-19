@@ -15,7 +15,7 @@ morgan.token('body', (request, response) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-app.get('/info', (request, response, error) => {
+app.get('/info', (request, response, next) => {
   Person.find({})
     .then(persons => {
       const content = `<div>
