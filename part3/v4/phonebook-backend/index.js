@@ -47,11 +47,12 @@ app.get('/', (request, response) => {
   response.send(content)
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(persons => {
       response.json(persons)
     })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -65,7 +66,7 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
@@ -91,6 +92,7 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
       response.status(201).json(savedPerson)
     })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -102,6 +104,12 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
