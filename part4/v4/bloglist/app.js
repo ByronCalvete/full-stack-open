@@ -1,49 +1,30 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const logger = require('./utils/logger')
+const config = require('./utils/config')
+const middleware = require('./utils/middleware')
+const blogsRouter = require('./controllers/blogs')
 
 const app = express()
 
-app.use(express.static('dist'))
-app.use(express.json())
-
-const url = process.env.MONGODB_URI
+mongoose.set('strictQuery', false)
 
 mongoose
-  .connect(url)
+  .connect(config.MONGODB_URI)
   .then(() => {
-    console.log('connected to MongoDB')
+    logger.info('connected to MongoDB')
   })
   .catch(error => {
-    console.log('error connecting to MongoDB:', error.message)
+    logger.error('error connecting to MongoDB:', error.message)
   })
 
-const blogSchema = mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
+app.use(express.static('dist'))
+app.use(express.json())
+app.use(middleware.requestLogger)
 
-const Blog = mongoose.model('Blog', blogSchema)
+app.use('/api/blogs', blogsRouter)
 
-app.get('/api/blogs', (request, response, next) => {
-  Blog.find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-    .catch(error =>  next(error))
-})
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
-app.post('/api/blogs', (request, response, next) => {
-  const blog = new Blog(request.body)
-
-  blog.save()
-    .then(savedBlog => {
-      response.status(201).json(savedBlog)
-    })
-    .catch(error => next(error))
-})
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`)
-})
+module.exports = app
