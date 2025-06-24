@@ -7,14 +7,12 @@ const notesRouter = require('./controllers/notes')
 
 const app = express()
 
-logger.info('connecting to', config.MONGODB_URI)
-
 mongoose.set('strictQuery', false)
 
 mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
-    logger.info('connecting to MongoDB')
+    logger.info('connected to MongoDB')
   })
   .catch(error => {
     logger.error('error connecting to MongoDB:', error.message)
