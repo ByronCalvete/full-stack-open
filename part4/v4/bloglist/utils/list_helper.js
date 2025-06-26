@@ -27,8 +27,35 @@ const favoriteBlog = (blogs) => {
   return blogWithMostLikes
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return 'There are no blogs'
+  } else if (blogs.length === 1) {
+    const mostAuthor = {
+      author: blogs[0].author,
+      blogs: 1
+    }
+    return mostAuthor
+  }
+
+  const authors = blogs.map(blog => blog.author)
+  const totalBlogsByAuthor = authors.reduce((list, i) => {
+    list[i] = (list[i] || 0) + 1
+    return list
+  }, {})
+
+  const maxBlogs = Math.max(...Object.values(totalBlogsByAuthor))
+  const mostFrecuentAuthor = Object.keys(totalBlogsByAuthor).filter(author => totalBlogsByAuthor[author] === maxBlogs)
+
+  return {
+    author: mostFrecuentAuthor[0],
+    blogs: maxBlogs
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
