@@ -7,7 +7,7 @@ if (process.argv.length < 3 ) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://fullstack-v4:${password}@project-v4.20ph1kb.mongodb.net/noteApp?retryWrites=true&w=majority&appName=project-v4`
+const url = `mongodb+srv://fullstack-v4:${password}@project-v4.20ph1kb.mongodb.net/testNoteApp?retryWrites=true&w=majority&appName=project-v4`
 
 mongoose.set('strictQuery', false)
 
@@ -21,7 +21,7 @@ const noteSchema = new mongoose.Schema({
 const Note = mongoose.model('Note', noteSchema)
 
 // const note = new Note({
-//   content: 'GET and POST are the most important methods of HTTP protocol',
+//   content: 'Browser can execute only JavaScript',
 //   important: false
 // })
 

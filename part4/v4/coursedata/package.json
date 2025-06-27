@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch --env-file=config.env index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node --watch --env-file=config.env index.js",
     "build:ui": "rm -rf dist && cd ../../../part2/v4/coursedata && pnpm run build && cp -r dist ../../../part3/v4/coursedata",
     "deploy:full": "pnpm run build:ui && git add . && git commit -m uibuild && git push",
-    "test": "node --test",
+    "test": "NODE_ENV=test node --env-file=config.env --test",
     "lint": "eslint ."
   },
   "keywords": [],
@@ -22,6 +22,7 @@
     "@eslint/js": "^9.29.0",
     "@stylistic/eslint-plugin-js": "^4.4.1",
     "eslint": "^9.29.0",
-    "globals": "^16.2.0"
+    "globals": "^16.2.0",
+    "supertest": "^7.1.1"
   }
 }
