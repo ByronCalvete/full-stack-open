@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch --env-file=config.env index.js",
-    "test": "node --test"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node --watch --env-file=config.env index.js",
+    "test": "NODE_ENV=test node --env-file=config.env --test"
   },
   "keywords": [],
   "author": "Rocky Calvete",
@@ -14,5 +14,8 @@
   "dependencies": {
     "express": "^5.1.0",
     "mongoose": "^8.16.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.1"
   }
 }
