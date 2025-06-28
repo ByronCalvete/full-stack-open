@@ -26,8 +26,18 @@ test('blogs are returned as json', async () => {
 
 test('all blogs are returned', async () => {
   const response = await helper.blogsInDb()
-  
+
   assert.strictEqual(response.length, helper.initialBlogs.length)
+})
+
+test('the unique identifier property is named id', async () => {
+  const response = await helper.blogsInDb()
+
+  response.forEach(blog => {
+    const key = Object.keys(blog)
+    assert.strictEqual(key.includes('id'), true)
+    assert.strictEqual(key.includes('_id'), false)
+  })
 })
 
 after(async () => {
