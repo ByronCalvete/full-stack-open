@@ -114,6 +114,21 @@ test('error 400 if the url property is missing', async () => {
   assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
 })
 
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+  
+  const blogsAtEnd = await helper.blogsInDb()
+  const titles = blogsAtEnd.map(blog => blog.title)
+
+  assert.strictEqual(!titles.includes(blogToDelete.title), true)
+  assert.strictEqual(blogsAtStart.length - 1 , blogsAtEnd.length)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
