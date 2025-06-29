@@ -80,6 +80,40 @@ test('default likes to 0 when the likes property is missing', async () => {
   assert.strictEqual(addedBlog[0].likes, 0)
 })
 
+test('error 400 if the title property is missing', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const newBlog = {
+    author: 'Create new post author',
+    url: 'www.posttest/com',
+    likes: 2
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+  
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+})
+
+test('error 400 if the url property is missing', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const newBlog = {
+    title: 'New Blog test creation',
+    author: 'Create new post author',
+    likes: 2
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
