@@ -76,6 +76,14 @@ describe('when there is initially some notes saved', () => {
 
   describe('addition of a new note', () => {
     test('a valid note can be added', async () => {
+      const user = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'sekret' })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const token = user._body.token
+
       const newNote = {
         content: 'async/await simplifies making async calls',
         important: true
@@ -84,6 +92,7 @@ describe('when there is initially some notes saved', () => {
       await api
         .post('/api/notes')
         .send(newNote)
+        .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -95,6 +104,14 @@ describe('when there is initially some notes saved', () => {
     })
 
     test('note without content is not added', async () => {
+      const user  = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'sekret' })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const token = user._body.token
+
       const newNote = {
         important: true
       }
@@ -102,6 +119,7 @@ describe('when there is initially some notes saved', () => {
       await api
         .post('/api/notes')
         .send(newNote)
+        .set('Authorization', `Bearer ${token}`)
         .expect(400)
 
       const notesAtEnd = await helper.notesInDb()
