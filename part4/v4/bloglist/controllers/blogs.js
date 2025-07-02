@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blogs')
 const User = require('../models/user')
@@ -13,10 +14,24 @@ blogsRouter.get('/', async (request, response, next) => {
   }
 })
 
+const getTokenFrom = (request) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+
+  return null
+}
+
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
-  const user = await User.findById(body.userId)
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invald' })
+  }
+
+  const user = await User.findById(decodedToken.id)
 
   if(!user) {
     return response.status(400).json({ error: 'userId missing or not valid' })
