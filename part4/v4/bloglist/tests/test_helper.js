@@ -6,13 +6,15 @@ const initialBlogs = [
     title: 'Blog 1',
     author: 'Danna la fea',
     url: 'www.dannalafea.com',
-    likes: 2
+    likes: 2,
+    user: '686408fbda58bc58a9da4e17'
   },
   {
     title: 'Blog 2',
     author: 'Rocky el loco',
     url: 'www.rockyelloco.com',
-    likes: 4
+    likes: 4,
+    user: '686408fbda58bc58a9da4e17'
   }
 ]
 
