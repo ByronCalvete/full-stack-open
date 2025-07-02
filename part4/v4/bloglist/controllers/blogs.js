@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blogs')
 const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response, next) => {
   try {
@@ -14,13 +15,10 @@ blogsRouter.get('/', async (request, response, next) => {
   }
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/', userExtractor, async (request, response, next) => {
   const body = request.body
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invald' })
-  }
+  const decodedToken = request.user
 
   const user = await User.findById(decodedToken.id)
 
@@ -65,10 +63,11 @@ blogsRouter.put('/:id', async (request, response, next) => {
   }
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
   const id = request.params.id
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   const blog = await Blog.findById(id)
+  
+  const decodedToken = request.user
 
   if (decodedToken.id.toString() !== blog.user.toString()) {
     return response.status(401).json({
