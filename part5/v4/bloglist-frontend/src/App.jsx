@@ -17,7 +17,13 @@ const App = () => {
   }, [])
 
   const handleLogin = (userLogged) => {
+    window.localStorage.setItem('blogListUserLogged', JSON.stringify(userLogged))
     setUser(userLogged)
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('blogListUserLogged')
+    setUser(null)
   }
   
   return (
@@ -27,7 +33,7 @@ const App = () => {
         (user === null || user.token === undefined)
           ? <LoginForm logUser={handleLogin}/>
           : <div>
-              <p>{user.name} logged-in</p>
+              <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
               <BlogList blogs={blogs} />
             </div>
       }
