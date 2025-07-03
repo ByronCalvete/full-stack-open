@@ -12,3 +12,23 @@ ul {
     margin: 10px 0;
   }
 }
+
+.successText {
+  color: green;
+  background: lightgray;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding:0 10px;
+  margin-bottom: 10px;
+}
+
+.errorText {
+  color: red;
+  background: lightgray;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}

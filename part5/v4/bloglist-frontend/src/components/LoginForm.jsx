@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import loginService from '../services/login'
 
-const LoginForm = ({ logUser }) => {
+const LoginForm = ({ logUser, message }) => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
 
@@ -16,6 +16,11 @@ const LoginForm = ({ logUser }) => {
       setPassword('')
     } catch {
       setPassword('')
+      setUsername('')
+      message('Wrong username or password')
+      setTimeout(() => {
+        message(null)
+      }, 3000)
     }
   }
 
