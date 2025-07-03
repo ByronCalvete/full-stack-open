@@ -24,6 +24,8 @@ const LoginForm = ({ logUser, errorMessage }) => {
   }
 
   return (
+    <>
+    <h2>Login</h2>
     <form onSubmit={handleLogin}>
       <div>
         username
@@ -45,6 +47,7 @@ const LoginForm = ({ logUser, errorMessage }) => {
       </div>
       <button type='submit'>login</button>
     </form>
+    </>
   )
 }
 
