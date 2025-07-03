@@ -83,9 +83,9 @@ const App = () => {
               errorMessage={setErrorMessage}
             />
           : <div>
-            <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
-            <NoteForm createNote={addNote} />
-          </div>
+              <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
+              <NoteForm createNote={addNote} />
+            </div>
       }
 
       <div>
