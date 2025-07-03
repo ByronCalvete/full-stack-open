@@ -3,13 +3,15 @@ import { useState, useEffect } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
 import noteService from './services/notes'
 
 const App = () => {
   const [ notes, setNotes ] = useState([])
-  const [ newNote, setNewNote ] = useState('')
   const [ showAll, setShowAll ] = useState(true)
   const [ errorMessage, setErrorMessage ] = useState(null)
+  const [ user, setUser ] = useState(null)
 
   useEffect(() => {
     noteService
@@ -19,18 +21,26 @@ const App = () => {
       })
   }, [])
 
-  const addNote = (e) => {
-    e.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5
+  useEffect(() => {
+    const loggerUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggerUserJSON) {
+      const user = JSON.parse(loggerUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
     }
+  }, [])
 
+  const handleLogin = (userLogged) => {
+    window.localStorage.setItem('loggedNoteappUser', JSON.stringify(userLogged))
+    noteService.setToken(userLogged.token)
+    setUser(userLogged)
+  }
+
+  const addNote = (noteObject) => {
     noteService
       .create(noteObject)
       .then(returnedNote => {
         setNotes([ ...notes, returnedNote ])
-        setNewNote('')
       })
   }
 
@@ -43,7 +53,7 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id === id ? returnedNote : note))
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(`Note ${note.content} was already removed from the server`)
         setTimeout(() => {
           setErrorMessage(null)
@@ -52,8 +62,9 @@ const App = () => {
       })
   }
 
-  const handleChange = (e) => {
-    setNewNote(e.target.value)
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
   }
 
   const notesToShow = showAll
@@ -64,6 +75,19 @@ const App = () => {
     <div>
       <h1>Notes</h1>
       {errorMessage && <Notification message={errorMessage} />}
+
+      {
+        user === null
+          ? <LoginForm
+              logUser={handleLogin}
+              errorMessage={setErrorMessage}
+            />
+          : <div>
+            <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
+            <NoteForm createNote={addNote} />
+          </div>
+      }
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -78,13 +102,6 @@ const App = () => {
           />
         )}
       </ul>
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleChange}
-        />
-        <button type='submit'>save</button>
-      </form>
       <Footer />
     </div>
   )
