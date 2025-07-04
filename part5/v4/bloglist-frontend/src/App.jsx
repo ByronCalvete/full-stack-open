@@ -4,6 +4,7 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -65,7 +66,9 @@ const App = () => {
             />
           : <div>
               <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
-              <BlogForm createBlog={addBlog}/>
+              <Togglable buttonLabel='new note'>
+                <BlogForm createBlog={addBlog}/>
+              </Togglable>
               <BlogList blogs={blogs} />
             </div>
       }
