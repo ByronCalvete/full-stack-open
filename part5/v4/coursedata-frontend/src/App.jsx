@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Note from './components/Note'
 import Notification from './components/Notification'
@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import noteService from './services/notes'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [ notes, setNotes ] = useState([])
@@ -30,6 +31,8 @@ const App = () => {
     }
   }, [])
 
+  const noteFormRef = useRef()
+
   const handleLogin = (userLogged) => {
     window.localStorage.setItem('loggedNoteappUser', JSON.stringify(userLogged))
     noteService.setToken(userLogged.token)
@@ -37,6 +40,7 @@ const App = () => {
   }
 
   const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
     noteService
       .create(noteObject)
       .then(returnedNote => {
@@ -78,13 +82,17 @@ const App = () => {
 
       {
         user === null
-          ? <LoginForm
-              logUser={handleLogin}
-              errorMessage={setErrorMessage}
-            />
+          ? <Togglable buttonLabel='login'>
+              <LoginForm
+                logUser={handleLogin}
+                errorMessage={setErrorMessage}
+              />
+            </Togglable>
           : <div>
               <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
-              <NoteForm createNote={addNote} />
+              <Togglable buttonLabel='new note' ref={noteFormRef}>
+                <NoteForm createNote={addNote} />
+              </Togglable>
             </div>
       }
 
