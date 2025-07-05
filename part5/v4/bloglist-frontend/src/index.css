@@ -32,3 +32,13 @@ ul {
   padding: 0 10px;
   margin-bottom: 10px;
 }
+
+.blog {
+  padding: 10px 5px;
+  border: 1px solid;
+  margin-bottom: 5px;
+  
+  p {
+    margin: 0;
+  }
+}
