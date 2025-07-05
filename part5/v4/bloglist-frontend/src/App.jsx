@@ -52,6 +52,17 @@ const App = () => {
     window.localStorage.removeItem('blogListUserLogged')
     setUser(null)
   }
+
+  const addLike = (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+
+    blogService
+      .update(blog.id, updatedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
+      })
+  }
   
   return (
     <div>
@@ -69,7 +80,7 @@ const App = () => {
               <Togglable buttonLabel='new note'>
                 <BlogForm createBlog={addBlog}/>
               </Togglable>
-              <BlogList blogs={blogs} />
+              <BlogList blogs={blogs} handleLike={addLike} />
             </div>
       }
     </div>

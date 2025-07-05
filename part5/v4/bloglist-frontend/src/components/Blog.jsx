@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-const Blog = ({ blog }) => {
-  const { title, author, url, likes } = blog
+const Blog = ({ blog, handleLike }) => {
+  const { title, author, url, likes, user } = blog
 
   const [ showDetails, setShowDetails ] = useState(false)
 
@@ -17,13 +17,13 @@ const Blog = ({ blog }) => {
   return (
     <li className='blog'>
       <div style={hideWhenVisible}>
-        <p>{title} <button onClick={toggleVisibility}>{buttonLabel}</button></p>
+        <p>{title} - {author} <button onClick={toggleVisibility}>{buttonLabel}</button></p>
       </div>
       <div style={showWhenVisible}>
         <p>{title} <button onClick={toggleVisibility}>{buttonLabel}</button></p>
         <p>{url}</p>
-        <p>likes {likes}</p>
-        <p>{author}</p>
+        <p>likes {likes} <button onClick={() => handleLike(blog.id)}>like</button></p>
+        <p>{user.name}</p>
       </div>
     </li>
   )
