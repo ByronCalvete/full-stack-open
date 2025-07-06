@@ -18,7 +18,7 @@ const BlogList = ({ blogs, handleLike, handleDelete, userLogged }) => {
               <Blog
                 key={blog.id}
                 blog={blog}
-                handleLike={handleLike} 
+                handleLike={handleLike}
                 handleDelete={handleDelete}
                 userLogged={userLogged}
               />

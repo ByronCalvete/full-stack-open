@@ -63,7 +63,7 @@ const App = () => {
         setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
       })
   }
-  
+
   const handleDelete = (id) => {
     const blog = blogs.find(blog => blog.id === id)
     if (confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
@@ -72,7 +72,7 @@ const App = () => {
       setBlogs(blogs.filter(blog => blog.id !== id))
     }
   }
-  
+
   return (
     <div>
       <h1>Bloglist App</h1>
@@ -81,21 +81,21 @@ const App = () => {
       {
         (user === null || user.token === undefined)
           ? <LoginForm
-              logUser={handleLogin}
-              message={setErrorMessage}
-            />
+            logUser={handleLogin}
+            message={setErrorMessage}
+          />
           : <div>
-              <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
-              <Togglable buttonLabel='new note'>
-                <BlogForm createBlog={addBlog}/>
-              </Togglable>
-              <BlogList
-                blogs={blogs}
-                handleLike={addLike}
-                handleDelete={handleDelete}
-                userLogged={user}
-              />
-            </div>
+            <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
+            <Togglable buttonLabel='new note'>
+              <BlogForm createBlog={addBlog}/>
+            </Togglable>
+            <BlogList
+              blogs={blogs}
+              handleLike={addLike}
+              handleDelete={handleDelete}
+              userLogged={user}
+            />
+          </div>
       }
     </div>
   )
