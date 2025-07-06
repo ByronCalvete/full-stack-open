@@ -61,6 +61,6 @@ const update = (id, updatedObject) => {
 export default {
   getAll,
   create,
-  update, 
+  update,
   setToken
 }

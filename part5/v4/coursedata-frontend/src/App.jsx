@@ -83,17 +83,17 @@ const App = () => {
       {
         user === null
           ? <Togglable buttonLabel='login'>
-              <LoginForm
-                logUser={handleLogin}
-                errorMessage={setErrorMessage}
-              />
-            </Togglable>
+            <LoginForm
+              logUser={handleLogin}
+              errorMessage={setErrorMessage}
+            />
+          </Togglable>
           : <div>
-              <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
-              <Togglable buttonLabel='new note' ref={noteFormRef}>
-                <NoteForm createNote={addNote} />
-              </Togglable>
-            </div>
+            <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
+            <Togglable buttonLabel='new note' ref={noteFormRef}>
+              <NoteForm createNote={addNote} />
+            </Togglable>
+          </div>
       }
 
       <div>
@@ -102,7 +102,7 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note => 
+        {notesToShow.map(note =>
           <Note
             key={note.id}
             note={note}
