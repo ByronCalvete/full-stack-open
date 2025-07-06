@@ -64,6 +64,15 @@ const App = () => {
       })
   }
   
+  const handleDelete = (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    if (confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      blogService
+        .deleteBlog(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    }
+  }
+  
   return (
     <div>
       <h1>Bloglist App</h1>
@@ -80,7 +89,12 @@ const App = () => {
               <Togglable buttonLabel='new note'>
                 <BlogForm createBlog={addBlog}/>
               </Togglable>
-              <BlogList blogs={blogs} handleLike={addLike} />
+              <BlogList
+                blogs={blogs}
+                handleLike={addLike}
+                handleDelete={handleDelete}
+                userLogged={user}
+              />
             </div>
       }
     </div>
