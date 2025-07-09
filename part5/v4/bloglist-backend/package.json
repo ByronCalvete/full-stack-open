@@ -6,7 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node --watch --env-file=config.env index.js",
-    "test": "NODE_ENV=test node --env-file=config.env --test"
+    "test": "NODE_ENV=test node --env-file=config.env --test",
+    "build:ui": "rm -rf dist && cd ../bloglist-frontend && pnpm run build && cp -r dist ../bloglist-backend",
+    "deploy:full": "pnpm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "keywords": [],
   "author": "Rocky Calvete",
