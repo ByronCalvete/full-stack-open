@@ -8,7 +8,8 @@
     "dev": "NODE_ENV=development node --watch --env-file=config.env index.js",
     "test": "NODE_ENV=test node --env-file=config.env --test",
     "build:ui": "rm -rf dist && cd ../bloglist-frontend && pnpm run build && cp -r dist ../bloglist-backend",
-    "deploy:full": "pnpm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "pnpm run build:ui && git add . && git commit -m uibuild && git push",
+    "start:test": "NODE_ENV=test node --env-file=config.env index.js"
   },
   "keywords": [],
   "author": "Rocky Calvete",
