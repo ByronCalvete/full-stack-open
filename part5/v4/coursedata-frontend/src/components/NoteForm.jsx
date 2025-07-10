@@ -18,6 +18,7 @@ const NoteForm = ({ createNote }) => {
       <h2>Create a new note</h2>
       <form onSubmit={addNote}>
         <input
+          data-testid='newNote'
           value={newNote}
           onChange={({ target }) => setNewNote(target.value)}
           placeholder='write a note content here'
