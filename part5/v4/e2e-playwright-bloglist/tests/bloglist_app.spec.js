@@ -58,6 +58,23 @@ describe('Blog app', () => {
 
         await expect(page.getByText('a new note created - the author of the note')).toBeVisible()
       })
+
+      describe('when a note was created', () => {
+        beforeEach(async ({ page }) => {
+          await page.getByRole('button', { name: 'new note' }).click()
+          await page.getByPlaceholder('write a title').fill('a new note created')
+          await page.getByPlaceholder('write an author').fill('the author of the note')
+          await page.getByPlaceholder('write an url').fill('www.test.com')
+          await page.getByRole('button', { name: 'create' }).click()
+        })
+
+        test('a note can be liked', async ({ page }) => {
+          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('button', { name: 'like' }).click()
+
+          await expect(page.getByText('likes 1')).toBeVisible()
+        })
+      })
     })
   })
 })
