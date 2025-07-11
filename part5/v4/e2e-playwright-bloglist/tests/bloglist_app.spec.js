@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -26,46 +27,29 @@ describe('Blog app', () => {
 
   describe('login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
-      await page.getByTestId('username').fill('rocky')
-      await page.getByTestId('password').fill('loco')
-      await page.getByRole('button', { name: 'login' }).click()
-
+      await loginWith(page, 'rocky', 'loco')
       await expect(page.getByText('Rocky Calvete logged-in')).toBeVisible()
     })
 
     test('fails with wrong credentials', async ({ page }) => {
-      await page.getByTestId('username').fill('rocky')
-      await page.getByTestId('password').fill('wrong')
-      await page.getByRole('button', { name: 'login' }).click()
-
+      await loginWith(page, 'rocky', 'wrong')
       await expect(page.getByText('Wrong username or password')).toBeVisible()
       await expect(page.getByText('Rocky Calvete logged-in')).not.toBeVisible()
     })
 
     describe('when logged in', () => {
       beforeEach(async ({ page }) => {
-        await page.getByTestId('username').fill('rocky')
-        await page.getByTestId('password').fill('loco')
-        await page.getByRole('button', { name: 'login' }).click()
+        await loginWith(page, 'rocky', 'loco')
       })
 
       test('a new blog can created', async ({ page }) => {
-        await page.getByRole('button', { name: 'new note' }).click()
-        await page.getByPlaceholder('write a title').fill('a new note created')
-        await page.getByPlaceholder('write an author').fill('the author of the note')
-        await page.getByPlaceholder('write an url').fill('www.test.com')
-        await page.getByRole('button', { name: 'create' }).click()
-
+        await createBlog(page, 'a new note created', 'the author of the note', 'www.test.com')
         await expect(page.getByText('a new note created - the author of the note')).toBeVisible()
       })
 
       describe('when a note was created', () => {
         beforeEach(async ({ page }) => {
-          await page.getByRole('button', { name: 'new note' }).click()
-          await page.getByPlaceholder('write a title').fill('a new note created')
-          await page.getByPlaceholder('write an author').fill('the author of the note')
-          await page.getByPlaceholder('write an url').fill('www.test.com')
-          await page.getByRole('button', { name: 'create' }).click()
+          await createBlog(page, 'a new note created', 'the author of the note', 'www.test.com')
         })
 
         test('a note can be liked', async ({ page }) => {
