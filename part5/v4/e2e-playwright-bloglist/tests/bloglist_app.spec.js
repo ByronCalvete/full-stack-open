@@ -74,6 +74,20 @@ describe('Blog app', () => {
 
           await expect(page.getByText('likes 1')).toBeVisible()
         })
+
+        test('a test can be deleted', async ({ page }) => {
+          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('button', { name: 'like' }).click()
+          
+          page.on('dialog', async (dialog) => {
+            expect(dialog.type()).toContain('confirm')
+            expect(dialog.message()).toContain('Remove blog a new note created by the author of the note')
+            await dialog.accept()
+          })
+          await page.getByRole('button', { name: 'remove' }).click()
+
+          await expect(page.getByText('a new note created - the author of the note')).not.toBeVisible()
+        })
       })
     })
   })
