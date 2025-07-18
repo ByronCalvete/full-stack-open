@@ -3,12 +3,12 @@ import filterReducer from './filterReducer'
 import deepFreeze from 'deep-freeze'
 
 describe('filter reducer', () => {
-  test('return a new state with action SET_FILTER', () => {
+  test('return a new state with action filter/filterChange', () => {
     const state = 'Hi'
 
     const action = {
-      type: 'SET_FILTER',
-      payload: 'note'
+      type: 'filter/filterChange',
+      payload: 'happy'
     }
 
     deepFreeze(state)
