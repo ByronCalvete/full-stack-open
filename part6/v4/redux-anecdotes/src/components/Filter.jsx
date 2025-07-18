@@ -7,7 +7,7 @@ const Filter = () => {
   const handleChange = (e) => dispatch(filterChange(e.target.value))
 
   return (
-    <div style={{ 'marginBottom': 10 }}>
+    <div style={{ 'marginBottom': 10, 'marginTop': 10 }}>
       filter <input type='text' onChange={handleChange}/>
     </div>
   )
