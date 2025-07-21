@@ -14,6 +14,11 @@
       "id": "2d82",
       "content": "test note for post method",
       "important": false
+    },
+    {
+      "id": "b305",
+      "content": "Another brick in the wall",
+      "important": true
     }
   ]
 }
