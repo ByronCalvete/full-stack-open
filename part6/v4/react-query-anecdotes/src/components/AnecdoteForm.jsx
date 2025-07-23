@@ -16,6 +16,12 @@ const AnecdoteForm = () => {
       setTimeout(() => {
         dispatch({ type: 'HIDE' })
       }, 3000)
+    },
+    onError: (error) => {
+      dispatch({ type: 'SET', payload: error.response.data.error })
+      setTimeout(() => {
+        dispatch({ type: 'HIDE' })
+      }, 3000)
     }
   })
 
