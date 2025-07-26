@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
 
+import { useField } from './hooks'
+
 const Anecdote = ({ anecdote }) => {
   return (
     <div>
@@ -51,33 +53,37 @@ const Footer = () => {
 }
 
 const Notification = ({ message }) => {
+  const style = {
+    border: 'solid',
+    borderWidth: 1,
+    padding: 5,
+    marginBottom: 10
+  }
+
   return (
-    <div>{message}</div>
+    <div style={style}>{message}</div>
   )
 }
 
 const CreateNew = ({ addNew, setNotification }) => {
-  const [ content, setContent ] = useState('')
-  const [ author, setAuthor ] = useState('')
-  const [ info, setInfo ] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
-    setNotification(`a new anecdote '${content}' created!`)
+    setNotification(`a new anecdote '${content.value}' created!`)
     setTimeout(() => {
       setNotification('')
     }, 3000)
-    setContent('')
-    setAuthor('')
-    setInfo('')
     navigate('/')
   }
 
@@ -87,15 +93,15 @@ const CreateNew = ({ addNew, setNotification }) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button type='submit'>create</button>
       </form>
