@@ -1,10 +1,14 @@
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import App from './App'
+import AppBootstrap from './AppBootstrap'
+import AppMaterialUI from './AppMaterialUI'
+import AppStyledComponents from './AppStyledComponents'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
-    <App />
+    {/* <AppBootstrap /> */}
+    {/* <AppMaterialUI /> */}
+    <AppStyledComponents />
   </Router>
 )
