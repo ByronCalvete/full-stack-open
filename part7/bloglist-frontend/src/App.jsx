@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import BlogList from './components/BlogList'
@@ -10,13 +10,13 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, liked, blogToDelete } from './reducers/blogReducer'
+import { logoutUser, cacheUser } from './reducers/userReducer'
 
 const App = () => {
-  const [ user, setUser ] = useState(null)
-
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -26,16 +26,17 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('blogListUserLogged')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(cacheUser(user))
       blogService.setToken(user.token)
     }
   }, [])
 
-  const handleLogin = (userLogged) => {
-    window.localStorage.setItem('blogListUserLogged', JSON.stringify(userLogged))
-    blogService.setToken(userLogged.token)
-    setUser(userLogged)
-  }
+  useEffect(() => {
+    if (user) {
+      window.localStorage.setItem('blogListUserLogged', JSON.stringify(user))
+      blogService.setToken(user.token)
+    }
+  }, [user])
 
   const addBlog = (blogObject) => {
     dispatch(createBlog(blogObject))
@@ -44,7 +45,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('blogListUserLogged')
-    setUser(null)
+    dispatch(logoutUser(null))
   }
 
   const addLike = (id) => {
@@ -68,10 +69,7 @@ const App = () => {
       { (notification && user === null) && <Notification message={notification} type='error' /> }
       {
         (user === null || user.token === undefined)
-          ? <LoginForm
-            logUser={handleLogin}
-            // message={setErrorMessage}
-          />
+          ? <LoginForm />
           : <div>
             <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
             <Togglable buttonLabel='new note'>
