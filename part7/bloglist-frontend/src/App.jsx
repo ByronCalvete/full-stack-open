@@ -9,20 +9,17 @@ import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog, liked, blogToDelete } from './reducers/blogReducer'
 
 const App = () => {
-  const [ blogs, setBlogs ] = useState([])
   const [ user, setUser ] = useState(null)
 
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
+  const blogs = useSelector(state => state.blogs)
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(returnedBlogs => {
-        setBlogs(returnedBlogs)
-      })
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -41,12 +38,8 @@ const App = () => {
   }
 
   const addBlog = (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs([ ...blogs, returnedBlog ])
-        dispatch(setNotification(`A new blog ${returnedBlog.title} by ${returnedBlog.author}`, 3000))
-      })
+    dispatch(createBlog(blogObject))
+    dispatch(setNotification(`A new blog ${blogObject.title} by ${blogObject.author}`, 3000))
   }
 
   const handleLogout = () => {
@@ -58,19 +51,13 @@ const App = () => {
     const blog = blogs.find(blog => blog.id === id)
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
 
-    blogService
-      .update(blog.id, updatedBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
-      })
+    dispatch(liked(id, updatedBlog))
   }
 
   const handleDelete = (id) => {
     const blog = blogs.find(blog => blog.id === id)
     if (confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      blogService
-        .deleteBlog(id)
-      setBlogs(blogs.filter(blog => blog.id !== id))
+      dispatch(blogToDelete(id))
     }
   }
 
@@ -91,7 +78,7 @@ const App = () => {
               <BlogForm createBlog={addBlog}/>
             </Togglable>
             <BlogList
-              blogs={blogs}
+              blogs={[ ...blogs ]}
               handleLike={addLike}
               handleDelete={handleDelete}
               userLogged={user}
