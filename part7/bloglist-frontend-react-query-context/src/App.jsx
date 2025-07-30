@@ -1,28 +1,46 @@
 import { useState, useEffect, useContext } from 'react'
-import NotificationContext from './NotificationContext'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+
 import blogService from './services/blogs'
+import NotificationContext from './NotificationContext'
 
 const App = () => {
-  const [ blogs, setBlogs ] = useState([])
   const [ user, setUser ] = useState(null)
-  // const [ successMessage, setSuccessMessage ] = useState(null)
-  // const [ errorMessage, setErrorMessage ] = useState(null)
+  const queryClient = useQueryClient()
 
   const [ notification, dispatch ] = useContext(NotificationContext)
 
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then(returnedBlogs => {
-        setBlogs(returnedBlogs)
-      })
-  }, [])
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: (newBlog) => {
+      // queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'], [ ...blogs, newBlog ])
+    }
+  })
+
+  const updateBlogMutation = useMutation({
+    mutationFn: blogService.update,
+    onSuccess: (updatedBlog) => {
+      // queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      const blogs = queryClient.getQueryData(['blogs'])
+      const newBlogs = blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog)
+      queryClient.setQueryData(['blogs'], newBlogs)
+    }
+  })
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: blogService.deleteBlog,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    }
+  })
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('blogListUserLogged')
@@ -40,15 +58,11 @@ const App = () => {
   }
 
   const addBlog = (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs([ ...blogs, returnedBlog ])
-        dispatch({ type: 'SET', payload: `A new blog ${returnedBlog.title} by ${returnedBlog.author}` })
-        setTimeout(() => {
-          dispatch({ type: 'HIDE' })
-        }, 3000)
-      })
+    newBlogMutation.mutate(blogObject)
+    dispatch({ type: 'SET', payload: `A new blog ${blogObject.title} by ${blogObject.author}` })
+    setTimeout(() => {
+      dispatch({ type: 'HIDE' })
+    }, 3000)
   }
 
   const handleLogout = () => {
@@ -60,21 +74,28 @@ const App = () => {
     const blog = blogs.find(blog => blog.id === id)
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
 
-    blogService
-      .update(blog.id, updatedBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
-      })
+    updateBlogMutation.mutate(updatedBlog)
   }
 
   const handleDelete = (id) => {
     const blog = blogs.find(blog => blog.id === id)
     if (confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      blogService
-        .deleteBlog(id)
-      setBlogs(blogs.filter(blog => blog.id !== id))
+      deleteBlogMutation.mutate(id)
     }
   }
+
+  // Get all blocks with React Query
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll,
+    refetchOnWindowFocus: false
+  })
+
+  if (result.isLoading) {
+    return <div>Loading blogs...</div>
+  }
+
+  const blogs = result.data
 
   return (
     <div>
