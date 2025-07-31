@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route, Link, useMatch } from 'react-router-dom'
 
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -119,7 +119,11 @@ const App = () => {
         (user === null || user.token === undefined)
           ? <LoginForm />
           : <div>
-            <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
+            <div style={{ marginBottom: 10, display: 'flex', backgroundColor: 'lightgray', padding: 10 }}>
+              <Link style={{ paddingRight: 10 }} to='/'>blogs</Link>
+              <Link style={{ paddingRight: 10 }} to='/users'>users</Link>
+              <div>{user.name} logged-in <button onClick={handleLogout}>Logout</button></div>
+            </div>
             <Routes>
               <Route path='/' element={<Home addBlog={addBlog} blogs={blogs} />} />
               <Route path='/blogs' element={<Home addBlog={addBlog} blogs={blogs} />} />
