@@ -7,6 +7,7 @@ import Notification from './components/Notification'
 import Home from './components/Home'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import blogService from './services/blogs'
 import userService from './services/users'
@@ -90,9 +91,9 @@ const App = () => {
     }
   }
 
-  const match = useMatch('/users/:id')
-  const userLogged = (match && usersList)
-    ? usersList.find(user => user.id === match.params.id)
+  const matchUser = useMatch('/users/:id')
+  const userLogged = (matchUser && usersList)
+    ? usersList.find(user => user.id === matchUser.params.id)
     : null
 
   // Get all blocks with React Query
@@ -102,11 +103,12 @@ const App = () => {
     refetchOnWindowFocus: false
   })
 
-  if (result.isLoading) {
-    return <div>Loading blogs...</div>
-  }
-
   const blogs = result.data
+
+  const matchBlog = useMatch('/blogs/:id')
+  const blog = (matchBlog && blogs)
+    ? blogs.find(blog => blog.id === matchBlog.params.id)
+    : null
 
   return (
     <div>
@@ -119,9 +121,11 @@ const App = () => {
           : <div>
             <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
             <Routes>
-              <Route path='/' element={<Home addBlog={addBlog} blogs={blogs} handleLike={addLike} handleDelete={handleDelete} userLogged={user} />} />
+              <Route path='/' element={<Home addBlog={addBlog} blogs={blogs} />} />
+              <Route path='/blogs' element={<Home addBlog={addBlog} blogs={blogs} />} />
               <Route path='/users' element={<Users />} />
               <Route path='/users/:id' element={<User user={userLogged} />} />
+              <Route path='/blogs/:id' element={<Blog blog={blog} handleLike={addLike} handleDelete={handleDelete} userLogged={user} />} />
             </Routes>
           </div>
       }
