@@ -1,18 +1,17 @@
 import { useEffect, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Routes, Route } from 'react-router-dom'
 
-import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
+import Home from './components/Home'
+import Users from './components/Users'
 
 import blogService from './services/blogs'
 import NotificationContext from './context/NotificationContext'
 import UserContext from './context/UserContext'
 
 const App = () => {
-  // const [ user, setUser ] = useState(null)
   const queryClient = useQueryClient()
 
   const [ user, userDispatch ] = useContext(UserContext)
@@ -103,15 +102,10 @@ const App = () => {
           ? <LoginForm />
           : <div>
             <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
-            <Togglable buttonLabel='new note'>
-              <BlogForm createBlog={addBlog}/>
-            </Togglable>
-            <BlogList
-              blogs={blogs}
-              handleLike={addLike}
-              handleDelete={handleDelete}
-              userLogged={user}
-            />
+            <Routes>
+              <Route path='/' element={<Home addBlog={addBlog} blogs={blogs} handleLike={addLike} handleDelete={handleDelete} userLogged={user} />} />
+              <Route path='/users' element={<Users />} />
+            </Routes>
           </div>
       }
     </div>
