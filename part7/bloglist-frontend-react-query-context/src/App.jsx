@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import BlogList from './components/BlogList'
@@ -8,12 +8,14 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
-import NotificationContext from './NotificationContext'
+import NotificationContext from './context/NotificationContext'
+import UserContext from './context/UserContext'
 
 const App = () => {
-  const [ user, setUser ] = useState(null)
+  // const [ user, setUser ] = useState(null)
   const queryClient = useQueryClient()
 
+  const [ user, userDispatch ] = useContext(UserContext)
   const [ notification, dispatch ] = useContext(NotificationContext)
 
   const newBlogMutation = useMutation({
@@ -46,16 +48,10 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('blogListUserLogged')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      userDispatch({ type: 'LOG_IN', payload: user })
       blogService.setToken(user.token)
     }
   }, [])
-
-  const handleLogin = (userLogged) => {
-    window.localStorage.setItem('blogListUserLogged', JSON.stringify(userLogged))
-    blogService.setToken(userLogged.token)
-    setUser(userLogged)
-  }
 
   const addBlog = (blogObject) => {
     newBlogMutation.mutate(blogObject)
@@ -67,7 +63,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('blogListUserLogged')
-    setUser(null)
+    userDispatch({ type: 'LOG_OUT' })
   }
 
   const addLike = (id) => {
@@ -104,9 +100,7 @@ const App = () => {
       { (notification && !user) && <Notification type='error' /> }
       {
         (user === null || user.token === undefined)
-          ? <LoginForm
-            logUser={handleLogin}
-          />
+          ? <LoginForm />
           : <div>
             <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
             <Togglable buttonLabel='new note'>

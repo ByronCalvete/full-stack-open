@@ -1,22 +1,24 @@
 import { useState } from 'react'
 
 import loginService from '../services/login'
-import { useNotificationDispatch } from '../hooks'
+import blogService from '../services/blogs'
+import { useNotificationDispatch, useUserDispatch } from '../hooks'
 
-const LoginForm = ({ logUser }) => {
+const LoginForm = () => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
 
   const dispatch = useNotificationDispatch()
+  const userDispatch = useUserDispatch()
 
   const handleLogin = async (e) => {
     e.preventDefault()
 
     try {
-      const user = await loginService.login({ username, password })
-      logUser(user)
-      setUsername('')
-      setPassword('')
+      const userLogged = await loginService.login({ username, password })
+      userDispatch({ type: 'LOG_IN', payload: userLogged })
+      window.localStorage.setItem('blogListUserLogged', JSON.stringify(userLogged))
+      blogService.setToken(userLogged.token)
     } catch {
       setPassword('')
       setUsername('')
