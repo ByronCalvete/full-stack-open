@@ -1,16 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
-import userService from '../services/users'
+import UsersListContext from '../context/UsersListContext'
 
 const Users = () => {
-  const [ users, setUsers ] = useState([])
+  const [ usersList ] = useContext(UsersListContext)
 
-  useEffect(() => {
-    userService.getAllUsers()
-      .then(allUsers =>
-        setUsers(allUsers)
-      )
-  }, [])
+  if (!usersList) return null
 
   return (
     <>
@@ -22,12 +18,12 @@ const Users = () => {
             <th>blogs created</th>
           </tr>
           {
-            users.map(user =>
+            usersList.map(user => (
               <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.blogs.length}</td>
+                <td><Link key={user.id} to={`/users/${user.id}`}>{user.name}</Link></td>
+                <td>{user.blogs?.length}</td>
               </tr>
-            )
+            ))
           }
         </tbody>
       </table>

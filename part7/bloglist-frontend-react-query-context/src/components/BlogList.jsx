@@ -1,12 +1,6 @@
 import Blog from './Blog'
 
 const BlogList = ({ blogs, handleLike, handleDelete, userLogged }) => {
-  // console.log('Initial', blogs)
-
-  // const sortedBlogs = blogs.sort((a,b) => a.likes - b.likes)
-
-  // console.log('Sorted', sortedBlogs)
-
   return (
     <>
       <h2>Blogs</h2>

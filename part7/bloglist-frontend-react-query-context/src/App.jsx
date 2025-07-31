@@ -1,21 +1,25 @@
 import { useEffect, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Home from './components/Home'
 import Users from './components/Users'
+import User from './components/User'
 
 import blogService from './services/blogs'
+import userService from './services/users'
 import NotificationContext from './context/NotificationContext'
 import UserContext from './context/UserContext'
+import UsersListContext from './context/UsersListContext'
 
 const App = () => {
   const queryClient = useQueryClient()
 
   const [ user, userDispatch ] = useContext(UserContext)
   const [ notification, dispatch ] = useContext(NotificationContext)
+  const [ usersList, usersListDispatch ] = useContext(UsersListContext)
 
   const newBlogMutation = useMutation({
     mutationFn: blogService.create,
@@ -52,6 +56,13 @@ const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+    userService.getAllUsers()
+      .then(allUsers =>
+        usersListDispatch({ type: 'GET_ALL', payload: allUsers })
+      )
+  }, [])
+
   const addBlog = (blogObject) => {
     newBlogMutation.mutate(blogObject)
     dispatch({ type: 'SET', payload: `A new blog ${blogObject.title} by ${blogObject.author}` })
@@ -79,6 +90,11 @@ const App = () => {
     }
   }
 
+  const match = useMatch('/users/:id')
+  const userLogged = (match && usersList)
+    ? usersList.find(user => user.id === match.params.id)
+    : null
+
   // Get all blocks with React Query
   const result = useQuery({
     queryKey: ['blogs'],
@@ -105,6 +121,7 @@ const App = () => {
             <Routes>
               <Route path='/' element={<Home addBlog={addBlog} blogs={blogs} handleLike={addLike} handleDelete={handleDelete} userLogged={user} />} />
               <Route path='/users' element={<Users />} />
+              <Route path='/users/:id' element={<User user={userLogged} />} />
             </Routes>
           </div>
       }
